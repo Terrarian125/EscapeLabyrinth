@@ -442,51 +442,51 @@ void ImGui::BulletTextV(const char* fmt, va_list args)
 //See the series of events below and the corresponding state reported by dear imgui:
 //------------------------------------------------------------------------------------------------------------------------------------------------
 //with PressedOnClickRelease:             return-value  IsItemHovered()  IsItemActive()  IsItemActivated()  IsItemDeactivated()  IsItemClicked()
-//  Frame N+0 (mouse is outside bb)        -             -                -               -                  -                    -
-//  Frame N+1 (mouse moves inside bb)      -             true             -               -                  -                    -
-//  Frame N+2 (mouse button is down)       -             true             true            true               -                    true
-//  Frame N+3 (mouse button is down)       -             true             true            -                  -                    -
-//  Frame N+4 (mouse moves outside bb)     -             -                true            -                  -                    -
-//  Frame N+5 (mouse moves inside bb)      -             true             true            -                  -                    -
-//  Frame N+6 (mouse button is released)   true          true             -               -                  true                 -
-//  Frame N+7 (mouse button is released)   -             true             -               -                  -                    -
-//  Frame N+8 (mouse moves outside bb)     -             -                -               -                  -                    -
+// Frame N+0 (mouse is outside bb)        -             -                -               -                  -                    -
+// Frame N+1 (mouse moves inside bb)      -             true             -               -                  -                    -
+// Frame N+2 (mouse button is down)       -             true             true            true               -                    true
+// Frame N+3 (mouse button is down)       -             true             true            -                  -                    -
+// Frame N+4 (mouse moves outside bb)     -             -                true            -                  -                    -
+// Frame N+5 (mouse moves inside bb)      -             true             true            -                  -                    -
+// Frame N+6 (mouse button is released)   true          true             -               -                  true                 -
+// Frame N+7 (mouse button is released)   -             true             -               -                  -                    -
+// Frame N+8 (mouse moves outside bb)     -             -                -               -                  -                    -
 //------------------------------------------------------------------------------------------------------------------------------------------------
 //with PressedOnClick:                    return-value  IsItemHovered()  IsItemActive()  IsItemActivated()  IsItemDeactivated()  IsItemClicked()
-//  Frame N+2 (mouse button is down)       true          true             true            true               -                    true
-//  Frame N+3 (mouse button is down)       -             true             true            -                  -                    -
-//  Frame N+6 (mouse button is released)   -             true             -               -                  true                 -
-//  Frame N+7 (mouse button is released)   -             true             -               -                  -                    -
+// Frame N+2 (mouse button is down)       true          true             true            true               -                    true
+// Frame N+3 (mouse button is down)       -             true             true            -                  -                    -
+// Frame N+6 (mouse button is released)   -             true             -               -                  true                 -
+// Frame N+7 (mouse button is released)   -             true             -               -                  -                    -
 //------------------------------------------------------------------------------------------------------------------------------------------------
 //with PressedOnRelease:                  return-value  IsItemHovered()  IsItemActive()  IsItemActivated()  IsItemDeactivated()  IsItemClicked()
-//  Frame N+2 (mouse button is down)       -             true             -               -                  -                    true
-//  Frame N+3 (mouse button is down)       -             true             -               -                  -                    -
-//  Frame N+6 (mouse button is released)   true          true             -               -                  -                    -
-//  Frame N+7 (mouse button is released)   -             true             -               -                  -                    -
+// Frame N+2 (mouse button is down)       -             true             -               -                  -                    true
+// Frame N+3 (mouse button is down)       -             true             -               -                  -                    -
+// Frame N+6 (mouse button is released)   true          true             -               -                  -                    -
+// Frame N+7 (mouse button is released)   -             true             -               -                  -                    -
 //------------------------------------------------------------------------------------------------------------------------------------------------
 //with PressedOnDoubleClick:              return-value  IsItemHovered()  IsItemActive()  IsItemActivated()  IsItemDeactivated()  IsItemClicked()
-//  Frame N+0 (mouse button is down)       -             true             -               -                  -                    true
-//  Frame N+1 (mouse button is down)       -             true             -               -                  -                    -
-//  Frame N+2 (mouse button is released)   -             true             -               -                  -                    -
-//  Frame N+3 (mouse button is released)   -             true             -               -                  -                    -
-//  Frame N+4 (mouse button is down)       true          true             true            true               -                    true
-//  Frame N+5 (mouse button is down)       -             true             true            -                  -                    -
-//  Frame N+6 (mouse button is released)   -             true             -               -                  true                 -
-//  Frame N+7 (mouse button is released)   -             true             -               -                  -                    -
+// Frame N+0 (mouse button is down)       -             true             -               -                  -                    true
+// Frame N+1 (mouse button is down)       -             true             -               -                  -                    -
+// Frame N+2 (mouse button is released)   -             true             -               -                  -                    -
+// Frame N+3 (mouse button is released)   -             true             -               -                  -                    -
+// Frame N+4 (mouse button is down)       true          true             true            true               -                    true
+// Frame N+5 (mouse button is down)       -             true             true            -                  -                    -
+// Frame N+6 (mouse button is released)   -             true             -               -                  true                 -
+// Frame N+7 (mouse button is released)   -             true             -               -                  -                    -
 //------------------------------------------------------------------------------------------------------------------------------------------------
 //Note that some combinations are supported,
 //- PressedOnDragDropHold can generally be associated with any flag.
 //- PressedOnDoubleClick can be associated by PressedOnClickRelease/PressedOnRelease, in which case the second release event won't be reported.
 //------------------------------------------------------------------------------------------------------------------------------------------------
 //The behavior of the return-value changes when ImGuiButtonFlags_Repeat is set:
-//                                        Repeat+                  Repeat+           Repeat+             Repeat+
-//                                        PressedOnClickRelease    PressedOnClick    PressedOnRelease    PressedOnDoubleClick
+//                                       Repeat+                  Repeat+           Repeat+             Repeat+
+//                                       PressedOnClickRelease    PressedOnClick    PressedOnRelease    PressedOnDoubleClick
 //-------------------------------------------------------------------------------------------------------------------------------------------------
-//  Frame N+0 (mouse button is down)       -                        true              -                   true
-//  ...                                    -                        -                 -                   -
-//  Frame N + RepeatDelay                  true                     true              -                   true
-//  ...                                    -                        -                 -                   -
-//  Frame N + RepeatDelay + RepeatRate*N   true                     true              -                   true
+// Frame N+0 (mouse button is down)       -                        true              -                   true
+// ...                                    -                        -                 -                   -
+// Frame N + RepeatDelay                  true                     true              -                   true
+// ...                                    -                        -                 -                   -
+// Frame N + RepeatDelay + RepeatRate*N   true                     true              -                   true
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 
 bool ImGui::ButtonBehavior(const ImRect& bb, ImGuiID id, bool* out_hovered, bool* out_held, ImGuiButtonFlags flags)
@@ -722,7 +722,7 @@ bool ImGui::ButtonEx(const char* label, const ImVec2& size_arg, ImGuiButtonFlags
 
     //Automatically close popups
     //if (pressed && !(flags & ImGuiButtonFlags_DontClosePopups) && (window->Flags & ImGuiWindowFlags_Popup))
-    //   CloseCurrentPopup();
+    //  CloseCurrentPopup();
 
     IMGUI_TEST_ENGINE_ITEM_INFO(id, label, g.LastItemData.StatusFlags);
     return pressed;
@@ -2689,9 +2689,9 @@ TYPE ImGui::ScaleValueFromRatioT(ImGuiDataType data_type, float t, TYPE v_min, T
         else if (t < 1.0)
         {
             //- For integer values we want the clicking position to match the grab box so we round above
-            //  This code is carefully tuned to work with large values (e.g. high ranges of U64) while preserving this property..
+            // This code is carefully tuned to work with large values (e.g. high ranges of U64) while preserving this property..
             //- Not doing a *1.0 multiply at the end of a range as it tends to be lossy. While absolute aiming at a large s64/u64
-            //  range is going to be imprecise anyway, with this check we at least make the edge values matches expected limits.
+            // range is going to be imprecise anyway, with this check we at least make the edge values matches expected limits.
             FLOATTYPE v_new_off_f = (SIGNEDTYPE)(v_max - v_min) * t;
             result = (TYPE)((SIGNEDTYPE)v_min + (SIGNEDTYPE)(v_new_off_f + (FLOATTYPE)(v_min > v_max ? -0.5 : 0.5)));
         }
@@ -3210,10 +3210,10 @@ const char* ImParseFormatFindEnd(const char* fmt)
 }
 
 //Extract the format out of a format string with leading or trailing decorations
-// fmt = "blah blah"  -> return fmt
-// fmt = "%.3f"       -> return fmt
-// fmt = "hello %.3f" -> return fmt + 6
-// fmt = "%.3f hello" -> return buf written with "%.3f"
+//fmt = "blah blah"  -> return fmt
+//fmt = "%.3f"       -> return fmt
+//fmt = "hello %.3f" -> return fmt + 6
+//fmt = "%.3f hello" -> return buf written with "%.3f"
 const char* ImParseFormatTrimDecorations(const char* fmt, char* buf, size_t buf_size)
 {
     const char* fmt_start = ImParseFormatFindStart(fmt);
@@ -3848,7 +3848,7 @@ static bool InputTextFilterCharacter(unsigned int* p_char, ImGuiInputTextFlags f
         //The standard mandate that programs starts in the "C" locale where the decimal point is '.'.
         //We don't really intend to provide widespread support for it, but out of empathy for people stuck with using odd API, we support the bare minimum aka overriding the decimal point.
         //Change the default decimal_point with:
-        //  ImGui::GetCurrentContext()->PlatformLocaleDecimalPoint = *localeconv()->decimal_point;
+        // ImGui::GetCurrentContext()->PlatformLocaleDecimalPoint = *localeconv()->decimal_point;
         //Users of non-default decimal point (in particular ',') may be affected by word-selection logic (is_word_boundary_from_right/is_word_boundary_from_left) functions.
         ImGuiContext& g = *GImGui;
         const unsigned c_decimal_point = (unsigned int)g.PlatformLocaleDecimalPoint;
@@ -3943,12 +3943,12 @@ static void InputTextReconcileUndoStateAfterUserCallback(ImGuiInputTextState* st
 
 //Edit a string of text
 //- buf_size account for the zero-terminator, so a buf_size of 6 can hold "Hello" but not "Hello!".
-//  This is so we can easily call InputText() on static arrays using ARRAYSIZE() and to match
-//  Note that in std::string world, capacity() would omit 1 byte used by the zero-terminator.
+// This is so we can easily call InputText() on static arrays using ARRAYSIZE() and to match
+// Note that in std::string world, capacity() would omit 1 byte used by the zero-terminator.
 //- When active, hold on a privately held copy of the text (and apply back to 'buf'). So changing 'buf' while the InputText is active has no effect.
 //- If you want to use ImGui::InputText() with std::string, see misc/cpp/imgui_stdlib.h
 //(FIXME: Rather confusing and messy function, among the worse part of our codebase, expecting to rewrite a V2 at some point.. Partly because we are
-// doing UTF8 > U16 > UTF8 conversions on the go to easily interface with stb_textedit. Ideally should stay in UTF-8 all the time. See https://github.com/nothings/stb/issues/188)
+//doing UTF8 > U16 > UTF8 conversions on the go to easily interface with stb_textedit. Ideally should stay in UTF-8 all the time. See https://github.com/nothings/stb/issues/188)
 bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_size, const ImVec2& size_arg, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void* callback_user_data)
 {
     ImGuiWindow* window = GetCurrentWindow();
@@ -6352,9 +6352,9 @@ bool ImGui::Selectable(const char* label, bool selected, ImGuiSelectableFlags fl
     //- This will be more fully fleshed in the range-select branch
     //- This is not exposed as it won't nicely work with some user side handling of shift/control
     //- We cannot do 'if (g.NavJustMovedToId != id) { selected = false; pressed = was_selected; }' for two reasons
-    //  - (1) it would require focus scope to be set, need exposing PushFocusScope() or equivalent (e.g. BeginSelection() calling PushFocusScope())
-    //  - (2) usage will fail with clipped items
-    //  The multi-select API aim to fix those issues, e.g. may be replaced with a BeginSelection() API.
+    // - (1) it would require focus scope to be set, need exposing PushFocusScope() or equivalent (e.g. BeginSelection() calling PushFocusScope())
+    // - (2) usage will fail with clipped items
+    // The multi-select API aim to fix those issues, e.g. may be replaced with a BeginSelection() API.
     if ((flags & ImGuiSelectableFlags_SelectOnNav) && g.NavJustMovedToId != 0 && g.NavJustMovedToFocusScopeId == g.CurrentFocusScopeId)
         if (g.NavJustMovedToId == id)
             selected = pressed = true;
@@ -7042,7 +7042,7 @@ bool ImGui::BeginMenuEx(const char* label, const char* icon, bool enabled)
     {
         //Menu inside a regular/vertical menu
         //(In a typical menu window where all items are BeginMenu() or MenuItem() calls, extra_w will always be 0.0f.
-        // Only when they are other items sticking out we're going to add spacing, yet only register minimum width into the layout system.
+        //Only when they are other items sticking out we're going to add spacing, yet only register minimum width into the layout system.
         popup_pos = ImVec2(pos.x, pos.y - style.WindowPadding.y);
         float icon_w = (icon && icon[0]) ? CalcTextSize(icon, NULL).x : 0.0f;
         float checkmark_w = IM_FLOOR(g.FontSize * 1.20f);
@@ -7235,7 +7235,7 @@ bool ImGui::MenuItemEx(const char* label, const char* icon, const char* shortcut
     {
         //Menu item inside a vertical menu
         //(In a typical menu window where all items are BeginMenu() or MenuItem() calls, extra_w will always be 0.0f.
-        // Only when they are other items sticking out we're going to add spacing, yet only register minimum width into the layout system.
+        //Only when they are other items sticking out we're going to add spacing, yet only register minimum width into the layout system.
         float icon_w = (icon && icon[0]) ? CalcTextSize(icon, NULL).x : 0.0f;
         float shortcut_w = (shortcut && shortcut[0]) ? CalcTextSize(shortcut, NULL).x : 0.0f;
         float checkmark_w = IM_FLOOR(g.FontSize * 1.20f);
@@ -8504,9 +8504,9 @@ void ImGui::TabItemLabelAndCloseButton(ImDrawList* draw_list, const ImRect& bb, 
 
     //Close Button & Unsaved Marker
     //We are relying on a subtle and confusing distinction between 'hovered' and 'g.HoveredId' which happens because we are using ImGuiButtonFlags_AllowOverlapMode + SetItemAllowOverlap()
-    // 'hovered' will be true when hovering the Tab but NOT when hovering the close button
-    // 'g.HoveredId==id' will be true when hovering the Tab including when hovering the close button
-    // 'g.ActiveId==close_button_id' will be true when we are holding on the close button, in which case both hovered booleans are false
+    //'hovered' will be true when hovering the Tab but NOT when hovering the close button
+    //'g.HoveredId==id' will be true when hovering the Tab including when hovering the close button
+    //'g.ActiveId==close_button_id' will be true when we are holding on the close button, in which case both hovered booleans are false
     bool close_button_pressed = false;
     bool close_button_visible = false;
     if (close_button_id != 0)

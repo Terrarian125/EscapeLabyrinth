@@ -3,7 +3,7 @@
 
 //You may use this file to debug, understand or extend ImGui features but we don't provide any guarantee of forward compatibility!
 //Set:
-//  #define IMGUI_DEFINE_MATH_OPERATORS
+// #define IMGUI_DEFINE_MATH_OPERATORS
 //To implement maths operators for ImVec2 (disabled by default to not collide with using IM_VEC2_CLASS_EXTRA along with your own math types+operators)
 
 /*
@@ -743,7 +743,7 @@ struct ImGuiTextIndex
 //ImDrawList: Helper function to calculate a circle's segment count given its radius and a "maximum error" value.
 //Estimation of number of circle segment based on error is derived using method described in https://stackoverflow.com/a/2244088/15194693
 //Number of segments (N) is calculated using equation:
-//  N = ceil ( pi / acos(1 - error / r) )     where r > 0, error <= r
+// N = ceil ( pi / acos(1 - error / r) )     where r > 0, error <= r
 //Our equation is significantly simpler that one in the post thanks for choosing segment that is
 //perpendicular to X axis. Follow steps in the article from this starting condition and you will
 //will get this result.
@@ -1380,10 +1380,10 @@ enum ImGuiInputFlags_
     //Routing policies for Shortcut() + low-level SetShortcutRouting()
     //- The general idea is that several callers register interest in a shortcut, and only one owner gets it.
     //- When a policy (other than _RouteAlways) is set, Shortcut() will register itself with SetShortcutRouting(),
-    //  allowing the system to decide where to route the input among other route-aware calls.
+    // allowing the system to decide where to route the input among other route-aware calls.
     //- Shortcut() uses ImGuiInputFlags_RouteFocused by default: meaning that a simple Shortcut() poll
-    //  will register a route and only succeed when parent window is in the focus stack and if no-one
-    //  with a higher priority is claiming the shortcut.
+    // will register a route and only succeed when parent window is in the focus stack and if no-one
+    // with a higher priority is claiming the shortcut.
     //- Using ImGuiInputFlags_RouteAlways is roughly equivalent to doing e.g. IsKeyPressed(key) + testing mods.
     //- Priorities: GlobalHigh > Focused (when owner is active item) > Global > Focused (when focused window) > GlobalLow.
     //- Can select only 1 policy among all available.
@@ -1500,9 +1500,9 @@ struct ImGuiNavItemData
     ImGuiID             FocusScopeId;   //Init,Move    //Best candidate focus scope ID
     ImRect              RectRel;        //Init,Move    //Best candidate bounding box in window relative space
     ImGuiItemFlags      InFlags;        //????,Move    //Best candidate item flags
-    float               DistBox;        //     Move    //Best candidate box distance to current NavId
-    float               DistCenter;     //     Move    //Best candidate center distance to current NavId
-    float               DistAxial;      //     Move    //Best candidate axial distance to current NavId
+    float               DistBox;        //    Move    //Best candidate box distance to current NavId
+    float               DistCenter;     //    Move    //Best candidate center distance to current NavId
+    float               DistAxial;      //    Move    //Best candidate axial distance to current NavId
 
     ImGuiNavItemData()  { Clear(); }
     void Clear()        { Window = NULL; ID = FocusScopeId = 0; InFlags = 0; DistBox = DistCenter = DistAxial = FLT_MAX; }
@@ -3152,11 +3152,11 @@ namespace ImGui
     //- Input queries can then read input by specifying ImGuiKeyOwner_Any (== 0), ImGuiKeyOwner_None (== -1) or a custom ID.
     //- Legacy input queries (without specifying an owner or _Any or _None) are equivalent to using ImGuiKeyOwner_Any (== 0).
     //- Input ownership is automatically released on the frame after a key is released. Therefore:
-    //  - for ownership registration happening as a result of a down/press event, the SetKeyOwner() call may be done once (common case).
-    //  - for ownership registration happening ahead of a down/press event, the SetKeyOwner() call needs to be made every frame (happens if e.g. claiming ownership on hover).
+    // - for ownership registration happening as a result of a down/press event, the SetKeyOwner() call may be done once (common case).
+    // - for ownership registration happening ahead of a down/press event, the SetKeyOwner() call needs to be made every frame (happens if e.g. claiming ownership on hover).
     //- SetItemKeyOwner() is a shortcut for common simple case. A custom widget will probably want to call SetKeyOwner() multiple times directly based on its interaction state.
     //- This is marked experimental because not all widgets are fully honoring the Set/Test idioms. We will need to move forward step by step.
-    //  Please open a GitHub Issue to submit your usage scenario or if there's a use case you need solved.
+    // Please open a GitHub Issue to submit your usage scenario or if there's a use case you need solved.
     IMGUI_API ImGuiID           GetKeyOwner(ImGuiKey key);
     IMGUI_API void              SetKeyOwner(ImGuiKey key, ImGuiID owner_id, ImGuiInputFlags flags = 0);
     IMGUI_API void              SetItemKeyOwner(ImGuiKey key, ImGuiInputFlags flags = 0);           //Set key owner to last item if it is hovered or active. Equivalent to 'if (IsItemHovered() || IsItemActive()) { SetKeyOwner(key, GetItemID());'.
@@ -3167,7 +3167,7 @@ namespace ImGui
     //- Important: legacy IsKeyPressed(ImGuiKey, bool repeat=true) _DEFAULTS_ to repeat, new IsKeyPressed() requires _EXPLICIT_ ImGuiInputFlags_Repeat flag.
     //- Expected to be later promoted to public API, the prototypes are designed to replace existing ones (since owner_id can default to Any == 0)
     //- Specifying a value for 'ImGuiID owner' will test that EITHER the key is NOT owned (UNLESS locked), EITHER the key is owned by 'owner'.
-    //  Legacy functions use ImGuiKeyOwner_Any meaning that they typically ignore ownership, unless a call to SetKeyOwner() explicitly used ImGuiInputFlags_LockThisFrame or ImGuiInputFlags_LockUntilRelease.
+    // Legacy functions use ImGuiKeyOwner_Any meaning that they typically ignore ownership, unless a call to SetKeyOwner() explicitly used ImGuiInputFlags_LockThisFrame or ImGuiInputFlags_LockUntilRelease.
     //- Binding generators may want to ignore those for now, or suffix them with Ex() until we decide if this gets moved into public API.
     IMGUI_API bool              IsKeyDown(ImGuiKey key, ImGuiID owner_id);
     IMGUI_API bool              IsKeyPressed(ImGuiKey key, ImGuiID owner_id, ImGuiInputFlags flags = 0);    //Important: when transitioning from old to new IsKeyPressed(): old API has "bool repeat = true", so would default to repeat. New API requiress explicit ImGuiInputFlags_Repeat.
@@ -3178,9 +3178,9 @@ namespace ImGui
 
     //[EXPERIMENTAL] Shortcut Routing
     //- ImGuiKeyChord = a ImGuiKey optionally OR-red with ImGuiMod_Alt/ImGuiMod_Ctrl/ImGuiMod_Shift/ImGuiMod_Super.
-    //    ImGuiKey_C                 (accepted by functions taking ImGuiKey or ImGuiKeyChord)
-    //    ImGuiKey_C | ImGuiMod_Ctrl (accepted by functions taking ImGuiKeyChord)
-    //  ONLY ImGuiMod_XXX values are legal to 'OR' with an ImGuiKey. You CANNOT 'OR' two ImGuiKey values.
+    //   ImGuiKey_C                 (accepted by functions taking ImGuiKey or ImGuiKeyChord)
+    //   ImGuiKey_C | ImGuiMod_Ctrl (accepted by functions taking ImGuiKeyChord)
+    // ONLY ImGuiMod_XXX values are legal to 'OR' with an ImGuiKey. You CANNOT 'OR' two ImGuiKey values.
     //- When using one of the routing flags (e.g. ImGuiInputFlags_RouteFocused): routes requested ahead of time given a chord (key + modifiers) and a routing policy.
     //- Routes are resolved during NewFrame(): if keyboard modifiers are matching current ones: SetKeyOwner() is called + route is granted for the frame.
     //- Route is granted to a single owner. When multiple requests are made we have policies to select the winning route.
@@ -3223,10 +3223,10 @@ namespace ImGui
     //- The DockBuilderXXX functions are designed to _eventually_ become a public API, but it is too early to expose it and guarantee stability.
     //- Do not hold on ImGuiDockNode* pointers! They may be invalidated by any split/merge/remove operation and every frame.
     //- To create a DockSpace() node, make sure to set the ImGuiDockNodeFlags_DockSpace flag when calling DockBuilderAddNode().
-    //  You can create dockspace nodes (attached to a window) _or_ floating nodes (carry its own window) with this API.
+    // You can create dockspace nodes (attached to a window) _or_ floating nodes (carry its own window) with this API.
     //- DockBuilderSplitNode() create 2 child nodes within 1 node. The initial node becomes a parent node.
     //- If you intend to split the node immediately after creation using DockBuilderSplitNode(), make sure
-    //  to call DockBuilderSetNodeSize() beforehand. If you don't, the resulting split sizes may not be reliable.
+    // to call DockBuilderSetNodeSize() beforehand. If you don't, the resulting split sizes may not be reliable.
     //- Call DockBuilderFinish() after you are done.
     IMGUI_API void          DockBuilderDockWindow(const char* window_name, ImGuiID node_id);
     IMGUI_API ImGuiDockNode*DockBuilderGetNode(ImGuiID node_id);
@@ -3247,8 +3247,8 @@ namespace ImGui
     //This is generally used to identify a unique input location (for e.g. a selection set)
     //There is one per window (automatically set in Begin), but:
     //- Selection patterns generally need to react (e.g. clear a selection) when landing on one item of the set.
-    //  So in order to identify a set multiple lists in same window may each need a focus scope.
-    //  If you imagine an hypothetical BeginSelectionGroup()/EndSelectionGroup() api, it would likely call PushFocusScope()/EndFocusScope()
+    // So in order to identify a set multiple lists in same window may each need a focus scope.
+    // If you imagine an hypothetical BeginSelectionGroup()/EndSelectionGroup() api, it would likely call PushFocusScope()/EndFocusScope()
     //- Shortcut routing also use focus scope as a default location identifier if an owner is not provided.
     //We don't use the ID Stack for this as it is common to want them separate.
     IMGUI_API void          PushFocusScope(ImGuiID id);
@@ -3479,9 +3479,9 @@ namespace ImGui
     inline bool     TreeNodeBehaviorIsOpen(ImGuiID id, ImGuiTreeNodeFlags flags = 0)    { return TreeNodeUpdateNextOpen(id, flags); }   //Renamed in 1.89
 
     //Refactored focus/nav/tabbing system in 1.82 and 1.84. If you have old/custom copy-and-pasted widgets that used FocusableItemRegister():
-    // (Old) IMGUI_VERSION_NUM  < 18209: using 'ItemAdd(....)'                              and 'bool tab_focused = FocusableItemRegister(...)'
-    // (Old) IMGUI_VERSION_NUM >= 18209: using 'ItemAdd(..., ImGuiItemAddFlags_Focusable)'  and 'bool tab_focused = (GetItemStatusFlags() & ImGuiItemStatusFlags_Focused) != 0'
-    // (New) IMGUI_VERSION_NUM >= 18413: using 'ItemAdd(..., ImGuiItemFlags_Inputable)'     and 'bool tab_focused = (GetItemStatusFlags() & ImGuiItemStatusFlags_FocusedTabbing) != 0 || g.NavActivateInputId == id' (WIP)
+    //(Old) IMGUI_VERSION_NUM  < 18209: using 'ItemAdd(....)'                              and 'bool tab_focused = FocusableItemRegister(...)'
+    //(Old) IMGUI_VERSION_NUM >= 18209: using 'ItemAdd(..., ImGuiItemAddFlags_Focusable)'  and 'bool tab_focused = (GetItemStatusFlags() & ImGuiItemStatusFlags_Focused) != 0'
+    //(New) IMGUI_VERSION_NUM >= 18413: using 'ItemAdd(..., ImGuiItemFlags_Inputable)'     and 'bool tab_focused = (GetItemStatusFlags() & ImGuiItemStatusFlags_FocusedTabbing) != 0 || g.NavActivateInputId == id' (WIP)
     //Widget code are simplified as there's no need to call FocusableItemUnregister() while managing the transition from regular widget to TempInputText()
     inline bool     FocusableItemRegister(ImGuiWindow* window, ImGuiID id)              { IM_ASSERT(0); IM_UNUSED(window); IM_UNUSED(id); return false; } //-> pass ImGuiItemAddFlags_Inputable flag to ItemAdd()
     inline void     FocusableItemUnregister(ImGuiWindow* window)                        { IM_ASSERT(0); IM_UNUSED(window); }                              //-> unnecessary: TempInputText() uses ImGuiInputTextFlags_MergedItem

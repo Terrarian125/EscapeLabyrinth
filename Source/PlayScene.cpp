@@ -17,9 +17,9 @@ PlayScene::~PlayScene() {
 }
 
 void PlayScene::Update() {
-    // ライトを有効化（全方位から照らす）
-    //SetOutDirectLight(VGet(-1.0f, -1.0f, -1.0f)); // 斜め上からの光
-    //SetAmbientLight(GetColor(150, 150, 150));      // 全体を明るく底上げ（環境光）
+    //ライトを有効化（全方位から照らす）
+    //SetOutDirectLight(VGet(-1.0f, -1.0f, -1.0f)); //斜め上からの光
+    //SetAmbientLight(GetColor(150, 150, 150));      //全体を明るく底上げ（環境光）
 
     if (!m_player || !m_camera) return;
 

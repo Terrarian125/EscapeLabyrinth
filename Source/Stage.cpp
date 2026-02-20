@@ -2,32 +2,35 @@
 #include "global.h"
 #include "../Library/MyDxLib.h"
 #include <algorithm>
+#include "Screen.h"
+#include "Player.h"
 
 Stage::Stage() {
     GenerateMaze();
-    m_floorGraph = LoadGraph("Assets/floor.png");
-    m_wallGraph = LoadGraph("Assets/wall.png");
+    m_floorGraph = LoadGraph("Data/Image/floor.png");
+    m_wallGraph = LoadGraph("Data/Image/wall.png");
+	m_bgGraph = LoadGraph("Data/Image/bg.png");
 }
 
 Stage::~Stage() {}
 
 void Stage::GenerateMaze() {
-    //1. 全てを壁(1)で初期化
+    //全てを壁(1)で初期化
     for (int y = 0; y < STAGE_HEIGHT; y++) {
         for (int x = 0; x < STAGE_WIDTH; x++) {
             m_mazeData[y][x] = 1;
         }
     }
 
-    //2. 穴掘り開始 (奇数座標 (1,1) から開始するのが定石)
+    //穴掘り開始 (奇数座標 (1,1) から開始するのが定石)
     Dig(1, 1);
 
-    //3. ループ構造の作成
+    //ループ構造の作成
     //穴掘り法だけだと「一本道（木構造）」になり逃げ場がなくなるため、
     //意図的に壁を壊して周回ルートを作ります。
     BreakWalls(12);
 
-    //4. 敵の配置
+    //敵の配置
     PlaceEnemies();
 }
 
@@ -104,68 +107,127 @@ void Stage::PlaceEnemies() {
 void Stage::WidenPaths()//ボツ
 {
     //for (int y = 1; y < STAGE_HEIGHT - 1; y++) {
-    //   for (int x = 1; x < STAGE_WIDTH - 1; x++) {
-    //       if (m_mazeData[y][x] == 0) { //もし通路なら
-    //           //上下左右をチェックして、30%くらいの確率で道にする
-    //           if (GetRand(100) < 30) m_mazeData[y + 1][x] = 0;
-    //           if (GetRand(100) < 30) m_mazeData[y][x + 1] = 0;
-    //       }
-    //   }
+    // for (int x = 1; x < STAGE_WIDTH - 1; x++) {
+    //     if (m_mazeData[y][x] == 0) { //もし通路なら
+    //         //上下左右をチェックして、30%くらいの確率で道にする
+    //         if (GetRand(100) < 30) m_mazeData[y + 1][x] = 0;
+    //         if (GetRand(100) < 30) m_mazeData[y][x + 1] = 0;
+    //     }
+    // }
     //}
 }
 
-void Stage::Update() {}
+void Stage::DrawMinimap() {
+    int mapSize = 15;
+    int range = 7;
+    int offsetX = 1100;
+    int offsetY = 100;
+
+    Player* player = FindGameObject<Player>();
+    if (!player) return;
+
+    VECTOR pPos = player->GetPosition();
+    //座標からインデックスを計算
+    int px = static_cast<int>((pPos.x + STAGE_SCALE / 2.0f) / STAGE_SCALE);
+    int pz = static_cast<int>((pPos.z + STAGE_SCALE / 2.0f) / STAGE_SCALE);
+
+    //壁と通路を描画
+    for (int y = pz - range; y <= pz + range; y++) {
+        for (int x = px - range; x <= px + range; x++) {
+            if (x < 0 || x >= STAGE_WIDTH || y < 0 || y >= STAGE_HEIGHT) continue;
+
+            unsigned int color = (m_mazeData[y][x] == 1) ? GetColor(150, 150, 150) : GetColor(30, 30, 30);
+
+            int drawX = offsetX + (x - (px - range)) * mapSize;
+            int drawY = offsetY + (y - (pz - range)) * mapSize;
+
+            DrawBox(drawX, drawY, drawX + mapSize, drawY + mapSize, color, TRUE);
+            DrawBox(drawX, drawY, drawX + mapSize, drawY + mapSize, GetColor(0, 0, 0), FALSE);
+        }
+    }
+
+    //プレイヤーを描画
+    // 中心位置を計算
+    int centerX = offsetX + range * mapSize + mapSize / 2;
+    int centerY = offsetY + range * mapSize + mapSize / 2;
+
+    // プレイヤーを赤い円で表示
+    DrawCircle(centerX, centerY, mapSize / 3, GetColor(255, 0, 0), TRUE);
+}
+
+void Stage::Update() {
+    //背景スクロール速度
+    bgScrollX -= 0.02f;
+
+    //画像1枚分（Screen::WIDTH）左に消えたら位置を0に戻す
+    if (bgScrollX <= -Screen::WIDTH) {
+        bgScrollX = 0.0f;
+    }
+}
 
 void Stage::Draw() {
-    float scale = STAGE_SCALE; // global.h で定義した 400.0f
+    // 1枚目
+    DrawExtendGraph((int)bgScrollX, 0, (int)bgScrollX + 1280, 720, m_bgGraph, FALSE);
+    // 2枚目（右側に連結）
+    DrawExtendGraph((int)bgScrollX + 1280, 0, (int)bgScrollX + 2560, 720, m_bgGraph, FALSE);
+
+    // 3D描画のためのZバッファ初期化
+    ClearDrawScreenZBuffer();
+
+    float scale = STAGE_SCALE;
     float half = scale / 2.0f;
 
-    // --- 光の設定（DXライブラリの正しい関数名） ---
-        // 1. ライトの向き（斜め下に向かって照らす）
+    // ライト設定（前回同様）
     SetLightDirection(VGet(-1.0f, -1.0f, -1.0f));
-
-    // 2. 環境光（影の部分を明るくする）
-    // 引数は COLOR_F 構造体なので、GetColorDiffuse を使います
-   //SetLightAmbColor(GetColorDiffuse(0.5f, 0.5f, 0.5f));
-
-    // 3. 拡散光（光が当たっている部分を明るくする）
-    //SetLightDifColor(GetColorDiffuse(1.0f, 1.0f, 1.0f));
+    COLOR_F amb = { 0.5f, 0.5f, 0.5f, 1.0f };
+    SetLightAmbColor(amb);
 
     for (int y = 0; y < STAGE_HEIGHT; y++) {
         for (int x = 0; x < STAGE_WIDTH; x++) {
             float cx = x * scale;
             float cz = y * scale;
 
-            // 床の描画
-            // Zバッファのチラつき防止のため、y座標を 0.1f だけ上げます
+            //床の描画
             DrawQuadGraph3D(
-                VGet(cx - half, 0.1f, cz - half), // 左手前
-                VGet(cx + half, 0.1f, cz - half), // 右手前
-                VGet(cx + half, 0.1f, cz + half), // 右奥
-                VGet(cx - half, 0.1f, cz + half), // 左奥
+                VGet(cx - half, 0.1f, cz - half), VGet(cx + half, 0.1f, cz - half),
+                VGet(cx + half, 0.1f, cz + half), VGet(cx - half, 0.1f, cz + half),
                 m_floorGraph, TRUE
             );
 
-            // --- 2. 壁の描画 ---
+            //壁の描画
             if (m_mazeData[y][x] == 1) {
-                // 壁は単色の箱を明るく描画（壁画像を使いたい場合はここもQuadGraph3Dを4面分書く）
-                VECTOR p1 = VGet(cx - half, 0.0f, cz - half);
-                VECTOR p2 = VGet(cx + half, scale, cz + half);
-
-                // 明るいグレー、エッジを白にして視認性を確保
-                DrawBox3D(p1, p2, GetColor(180, 180, 180), GetColor(255, 255, 255), TRUE);
-
-                // もし壁にも画像を貼るなら、例えば「正面」はこのようになります
-                /*
+                // 前面 (手前)
                 DrawQuadGraph3D(
-                    VGet(cx - half, scale, cz - half), // 上左
-                    VGet(cx + half, scale, cz - half), // 上右
-                    VGet(cx + half, 0.0f,  cz - half), // 下右
-                    VGet(cx - half, 0.0f,  cz - half), // 下左
+                    VGet(cx - half, scale, cz - half), VGet(cx + half, scale, cz - half),
+                    VGet(cx + half, 0.0f, cz - half), VGet(cx - half, 0.0f, cz - half),
                     m_wallGraph, TRUE
                 );
-                */
+                //背面 (奥)
+                DrawQuadGraph3D(
+                    VGet(cx + half, scale, cz + half), VGet(cx - half, scale, cz + half),
+                    VGet(cx - half, 0.0f, cz + half), VGet(cx + half, 0.0f, cz + half),
+                    m_wallGraph, TRUE
+                );
+                //右面
+                DrawQuadGraph3D(
+                    VGet(cx + half, scale, cz - half), VGet(cx + half, scale, cz + half),
+                    VGet(cx + half, 0.0f, cz + half), VGet(cx + half, 0.0f, cz - half),
+                    m_wallGraph, TRUE
+                );
+                //左面
+                DrawQuadGraph3D(
+                    VGet(cx - half, scale, cz + half), VGet(cx - half, scale, cz - half),
+                    VGet(cx - half, 0.0f, cz - half), VGet(cx - half, 0.0f, cz + half),
+                    m_wallGraph, TRUE
+                );
+                //天面 (上)
+                DrawQuadGraph3D(
+                    VGet(cx - half, scale, cz + half), VGet(cx + half, scale, cz + half),
+                    VGet(cx + half, scale, cz - half), VGet(cx - half, scale, cz - half),
+                    m_wallGraph, TRUE
+                );
             }
         }
     }
+    DrawMinimap();
 }

@@ -772,9 +772,9 @@ void ImDrawList::AddPolyline(const ImVec2* points, const int points_count, ImU32
 
             //The width of the geometry we need to draw - this is essentially <thickness> pixels for the line itself, plus "one pixel" for AA.
             //- In the texture-based path, we don't use AA_SIZE here because the +1 is tied to the generated texture
-            //  (see ImFontAtlasBuildRenderLinesTexData() function), and so alternate values won't work without changes to that code.
+            // (see ImFontAtlasBuildRenderLinesTexData() function), and so alternate values won't work without changes to that code.
             //- In the non texture-based paths, we would allow AA_SIZE to potentially be != 1.0f with a patch (e.g. fringe_scale patch to
-            //  allow scaling geometry while preserving one-screen-pixel AA fringe).
+            // allow scaling geometry while preserving one-screen-pixel AA fringe).
             const float half_draw_size = use_texture ? ((thickness * 0.5f) + 1) : AA_SIZE;
 
             //If line is not closed, the first and last points need to be generated differently as there are no normals to blend
@@ -1324,18 +1324,18 @@ static inline ImDrawFlags FixRectCornerFlags(ImDrawFlags flags)
 #ifndef IMGUI_DISABLE_OBSOLETE_FUNCTIONS
     //Obsoleted in 1.82 (from February 2021)
     //Legacy Support for hard coded ~0 (used to be a suggested equivalent to ImDrawCornerFlags_All)
-    //  ~0   --> ImDrawFlags_RoundCornersAll or 0
+    // ~0   --> ImDrawFlags_RoundCornersAll or 0
     if (flags == ~0)
         return ImDrawFlags_RoundCornersAll;
 
     //Legacy Support for hard coded 0x01 to 0x0F (matching 15 out of 16 old flags combinations)
-    //  0x01 --> ImDrawFlags_RoundCornersTopLeft (VALUE 0x01 OVERLAPS ImDrawFlags_Closed but ImDrawFlags_Closed is never valid in this path!)
-    //  0x02 --> ImDrawFlags_RoundCornersTopRight
-    //  0x03 --> ImDrawFlags_RoundCornersTopLeft | ImDrawFlags_RoundCornersTopRight
-    //  0x04 --> ImDrawFlags_RoundCornersBotLeft
-    //  0x05 --> ImDrawFlags_RoundCornersTopLeft | ImDrawFlags_RoundCornersBotLeft
-    //  ...
-    //  0x0F --> ImDrawFlags_RoundCornersAll or 0
+    // 0x01 --> ImDrawFlags_RoundCornersTopLeft (VALUE 0x01 OVERLAPS ImDrawFlags_Closed but ImDrawFlags_Closed is never valid in this path!)
+    // 0x02 --> ImDrawFlags_RoundCornersTopRight
+    // 0x03 --> ImDrawFlags_RoundCornersTopLeft | ImDrawFlags_RoundCornersTopRight
+    // 0x04 --> ImDrawFlags_RoundCornersBotLeft
+    // 0x05 --> ImDrawFlags_RoundCornersTopLeft | ImDrawFlags_RoundCornersBotLeft
+    // ...
+    // 0x0F --> ImDrawFlags_RoundCornersAll or 0
     //(See all values in ImDrawCornerFlags_)
     if (flags >= 0x01 && flags <= 0x0F)
         return (flags << 4);
@@ -2267,9 +2267,9 @@ bool    ImFontAtlas::Build()
 
     //Select builder
     //- Note that we do not reassign to atlas->FontBuilderIO, since it is likely to point to static data which
-    //  may mess with some hot-reloading schemes. If you need to assign to this (for dynamic selection) AND are
-    //  using a hot-reloading scheme that messes up static data, store your own instance of ImFontBuilderIO somewhere
-    //  and point to it instead of pointing directly to return value of the GetBuilderXXX functions.
+    // may mess with some hot-reloading schemes. If you need to assign to this (for dynamic selection) AND are
+    // using a hot-reloading scheme that messes up static data, store your own instance of ImFontBuilderIO somewhere
+    // and point to it instead of pointing directly to return value of the GetBuilderXXX functions.
     const ImFontBuilderIO* builder_io = FontBuilderIO;
     if (builder_io == NULL)
     {
@@ -2946,19 +2946,19 @@ const ImWchar*  ImFontAtlas::GetGlyphRangesJapanese()
     //- 2136 Joyo (meaning "for regular use" or "for common use") Kanji code points
     //- 863 Jinmeiyo (meaning "for personal name") Kanji code points
     //- Sourced from official information provided by the government agencies of Japan:
-    //  - List of Joyo Kanji by the Agency for Cultural Affairs
-    //    - https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/kanji/
-    //  - List of Jinmeiyo Kanji by the Ministry of Justice
-    //    - http://www.moj.go.jp/MINJI/minji86.html
-    //  - Available under the terms of the Creative Commons Attribution 4.0 International (CC BY 4.0).
-    //    - https://creativecommons.org/licenses/by/4.0/legalcode
+    // - List of Joyo Kanji by the Agency for Cultural Affairs
+    //   - https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/kanji/
+    // - List of Jinmeiyo Kanji by the Ministry of Justice
+    //   - http://www.moj.go.jp/MINJI/minji86.html
+    // - Available under the terms of the Creative Commons Attribution 4.0 International (CC BY 4.0).
+    //   - https://creativecommons.org/licenses/by/4.0/legalcode
     //- You can generate this code by the script at:
-    //  - https://github.com/vaiorabbit/everyday_use_kanji
+    // - https://github.com/vaiorabbit/everyday_use_kanji
     //- References:
-    //  - List of Joyo Kanji
-    //    - (Wikipedia) https://en.wikipedia.org/wiki/List_of_j%C5%8Dy%C5%8D_kanji
-    //  - List of Jinmeiyo Kanji
-    //    - (Wikipedia) https://en.wikipedia.org/wiki/Jinmeiy%C5%8D_kanji
+    // - List of Joyo Kanji
+    //   - (Wikipedia) https://en.wikipedia.org/wiki/List_of_j%C5%8Dy%C5%8D_kanji
+    // - List of Jinmeiyo Kanji
+    //   - (Wikipedia) https://en.wikipedia.org/wiki/Jinmeiy%C5%8D_kanji
     //- Missing 1 Joyo Kanji: U+20B9F (Kun'yomi: Shikaru, On'yomi: Shitsu,shichi), see https://github.com/ocornut/imgui/pull/3627 for details.
     //You can use ImFontGlyphRangesBuilder to create your own ranges derived from this, by merging existing ranges or adding new characters.
     //(Stored as accumulative offsets from the initial unicode codepoint 0x4E00. This encoding is designed to helps us compact the source code size.)
@@ -3370,8 +3370,8 @@ static inline const char* CalcWordWrapNextLineStartA(const char* text, const cha
 const char* ImFont::CalcWordWrapPositionA(float scale, const char* text, const char* text_end, float wrap_width) const
 {
     //For references, possible wrap point marked with ^
-    // "aaa bbb, ccc,ddd. eee   fff. ggg!"
-    //     ^    ^    ^   ^   ^__    ^    ^
+    //"aaa bbb, ccc,ddd. eee   fff. ggg!"
+    //    ^    ^    ^   ^   ^__    ^    ^
 
     //List of hardcoded separators: .,;!?'"
 

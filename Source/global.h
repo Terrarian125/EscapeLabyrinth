@@ -33,7 +33,7 @@ enum DIR
 
 //迷路のサイズとキャラのサイズ
 //迷路のsizeは奇数でないとダメ
-const int STAGE_WIDTH = 79;
-const int STAGE_HEIGHT = 61;
+const int STAGE_WIDTH = 29;
+const int STAGE_HEIGHT = 21;
 const int CHA_SIZE = 32; //キャラのサイズ 32*32
 const float STAGE_SCALE = 400.0f;

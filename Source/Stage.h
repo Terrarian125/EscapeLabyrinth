@@ -20,9 +20,13 @@ private:
     void BreakWalls(int breakCount);    //ループ作成用の壁破壊
     void PlaceEnemies();               //敵の配置
 	void WidenPaths();              //通路を広げる
+    void DrawMinimap();                   //ミニマップの描画
 
     int m_mazeData[STAGE_HEIGHT][STAGE_WIDTH]; //0:通路, 1:壁
 
-    int m_floorGraph; // 床の画像ハンドル
-    int m_wallGraph;  // 壁の画像ハンドル
+    int m_floorGraph; //床の画像ハンドル
+    int m_wallGraph;  //壁の画像ハンドル
+	int m_bgGraph; //背景の画像ハンドル
+
+    float bgScrollX;
 };

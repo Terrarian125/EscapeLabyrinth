@@ -10,7 +10,7 @@
 //
 //Before #including,
 //
-//   #define STB_RECT_PACK_IMPLEMENTATION
+//  #define STB_RECT_PACK_IMPLEMENTATION
 //
 //in the file that you want to have the implementation.
 //
@@ -33,38 +33,38 @@
 //
 //Credits
 //
-// Library
-//   Sean Barrett
-// Minor features
-//   Martins Mozeiko
-//   github:IntellectualKitty
+//Library
+//  Sean Barrett
+//Minor features
+//  Martins Mozeiko
+//  github:IntellectualKitty
 //
-// Bugfixes / warning fixes
-//   Jeremy Jaussaud
-//   Fabian Giesen
+//Bugfixes / warning fixes
+//  Jeremy Jaussaud
+//  Fabian Giesen
 //
 //Version history:
 //
-//    1.01  (2021-07-11)  always use large rect mode, expose STBRP__MAXVAL in public section
-//    1.00  (2019-02-25)  avoid small space waste; gracefully fail too-wide rectangles
-//    0.99  (2019-02-07)  warning fixes
-//    0.11  (2017-03-03)  return packing success/fail result
-//    0.10  (2016-10-25)  remove cast-away-const to avoid warnings
-//    0.09  (2016-08-27)  fix compiler warnings
-//    0.08  (2015-09-13)  really fix bug with empty rects (w=0 or h=0)
-//    0.07  (2015-09-13)  fix bug with empty rects (w=0 or h=0)
-//    0.06  (2015-04-15)  added STBRP_SORT to allow replacing qsort
-//    0.05:  added STBRP_ASSERT to allow replacing assert
-//    0.04:  fixed minor bug in STBRP_LARGE_RECTS support
-//    0.01:  initial release
+//   1.01  (2021-07-11)  always use large rect mode, expose STBRP__MAXVAL in public section
+//   1.00  (2019-02-25)  avoid small space waste; gracefully fail too-wide rectangles
+//   0.99  (2019-02-07)  warning fixes
+//   0.11  (2017-03-03)  return packing success/fail result
+//   0.10  (2016-10-25)  remove cast-away-const to avoid warnings
+//   0.09  (2016-08-27)  fix compiler warnings
+//   0.08  (2015-09-13)  really fix bug with empty rects (w=0 or h=0)
+//   0.07  (2015-09-13)  fix bug with empty rects (w=0 or h=0)
+//   0.06  (2015-04-15)  added STBRP_SORT to allow replacing qsort
+//   0.05:  added STBRP_ASSERT to allow replacing assert
+//   0.04:  fixed minor bug in STBRP_LARGE_RECTS support
+//   0.01:  initial release
 //
 //LICENSE
 //
-//  See end of file for license information.
+// See end of file for license information.
 
 //////////////////////////////////////////////////////////////////////////////
 //
-//      INCLUDE SECTION
+//     INCLUDE SECTION
 //
 
 #ifndef STB_INCLUDE_STB_RECT_PACK_H
@@ -133,8 +133,8 @@ struct stbrp_rect
 
 STBRP_DEF void stbrp_init_target (stbrp_context *context, int width, int height, stbrp_node *nodes, int num_nodes);
 //Initialize a rectangle packer to:
-//   pack a rectangle that is 'width' by 'height' in dimensions
-//   using temporary storage provided by the array 'nodes', which is 'num_nodes' long
+//  pack a rectangle that is 'width' by 'height' in dimensions
+//  using temporary storage provided by the array 'nodes', which is 'num_nodes' long
 //
 //You must call this function every time you start packing into a new target.
 //
@@ -143,8 +143,8 @@ STBRP_DEF void stbrp_init_target (stbrp_context *context, int width, int height,
 //the call (or calls) finish.
 //
 //Note: to guarantee best results, either:
-//      1. make sure 'num_nodes' >= 'width'
-//  or  2. call stbrp_allow_out_of_mem() defined below with 'allow_out_of_mem = 1'
+//     1. make sure 'num_nodes' >= 'width'
+// or  2. call stbrp_allow_out_of_mem() defined below with 'allow_out_of_mem = 1'
 //
 //If you don't do either of the above things, widths will be quantized to multiples
 //of small integers to guarantee the algorithm doesn't run out of temporary storage.
@@ -203,7 +203,7 @@ struct stbrp_context
 
 //////////////////////////////////////////////////////////////////////////////
 //
-//    IMPLEMENTATION SECTION
+//   IMPLEMENTATION SECTION
 //
 
 #ifdef STB_RECT_PACK_IMPLEMENTATION
@@ -255,8 +255,8 @@ STBRP_DEF void stbrp_setup_allow_out_of_mem(stbrp_context *context, int allow_ou
       //so that num_nodes is always enough nodes.
       //
       //I.e. num_nodes * align >= width
-      //                 align >= width / num_nodes
-      //                 align = ceil(width/num_nodes)
+      //                align >= width / num_nodes
+      //                align = ceil(width/num_nodes)
 
       context->align = (context->width + context->num_nodes-1) / context->num_nodes;
    }
@@ -394,14 +394,14 @@ static stbrp__findresult stbrp__skyline_find_best_pos(stbrp_context *c, int widt
    //
    //e.g, if fitting
    //
-   //    ____________________
-   //   |____________________|
+   //   ____________________
+   //  |____________________|
    //
-   //           into
+   //          into
    //
-   //  |                         |
-   //  |             ____________|
-   //  |____________|
+   // |                         |
+   // |             ____________|
+   // |____________|
    //
    //then right-aligned reduces waste, but bottom-left BL is always chooses left-aligned
    //
@@ -453,9 +453,9 @@ static stbrp__findresult stbrp__skyline_pack_rectangle(stbrp_context *context, i
    stbrp_node *node, *cur;
 
    //bail if:
-   //   1. it failed
-   //   2. the best node doesn't fit (we don't always check this)
-   //   3. we're out of memory
+   //  1. it failed
+   //  2. the best node doesn't fit (we don't always check this)
+   //  3. we're out of memory
    if (res.prev_link == NULL || res.y + height > context->height || context->free_head == NULL) {
       res.prev_link = NULL;
       return res;

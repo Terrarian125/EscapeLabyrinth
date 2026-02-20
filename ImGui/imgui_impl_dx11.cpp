@@ -2,9 +2,9 @@
 //This needs to be used along with a Platform Backend (e.g. Win32)
 
 //Implemented features:
-// [X] Renderer: User texture binding. Use 'ID3D11ShaderResourceView*' as ImTextureID. Read the FAQ about ImTextureID!
-// [X] Renderer: Multi-viewport support (multiple windows). Enable with 'io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable'.
-// [X] Renderer: Large meshes support (64k+ vertices) with 16-bit indices.
+//[X] Renderer: User texture binding. Use 'ID3D11ShaderResourceView*' as ImTextureID. Read the FAQ about ImTextureID!
+//[X] Renderer: Multi-viewport support (multiple windows). Enable with 'io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable'.
+//[X] Renderer: Large meshes support (64k+ vertices) with 16-bit indices.
 
 //You can use unmodified imgui_impl_* files in your project. See examples/ folder for examples of using this.
 //Prefer including the entire imgui/ repository into your project (either as a copy or as a submodule), and only build the backends you need.
@@ -13,24 +13,24 @@
 
 //CHANGELOG
 //(minor and older changes stripped away, please see git history for details)
-// 2023-XX-XX: Platform: Added support for multiple windows via the ImGuiPlatformIO interface.
-// 2022-10-11: Using 'nullptr' instead of 'NULL' as per our switch to C++11.
-// 2021-06-29: Reorganized backend to pull data from a single structure to facilitate usage with multiple-contexts (all g_XXXX access changed to bd->XXXX).
-// 2021-05-19: DirectX11: Replaced direct access to ImDrawCmd::TextureId with a call to ImDrawCmd::GetTexID(). (will become a requirement)
-// 2021-02-18: DirectX11: Change blending equation to preserve alpha in output buffer.
-// 2019-08-01: DirectX11: Fixed code querying the Geometry Shader state (would generally error with Debug layer enabled).
-// 2019-07-21: DirectX11: Backup, clear and restore Geometry Shader is any is bound when calling ImGui_ImplDX10_RenderDrawData. Clearing Hull/Domain/Compute shaders without backup/restore.
-// 2019-05-29: DirectX11: Added support for large mesh (64K+ vertices), enable ImGuiBackendFlags_RendererHasVtxOffset flag.
-// 2019-04-30: DirectX11: Added support for special ImDrawCallback_ResetRenderState callback to reset render state.
-// 2018-12-03: Misc: Added #pragma comment statement to automatically link with d3dcompiler.lib when using D3DCompile().
-// 2018-11-30: Misc: Setting up io.BackendRendererName so it can be displayed in the About Window.
-// 2018-08-01: DirectX11: Querying for IDXGIFactory instead of IDXGIFactory1 to increase compatibility.
-// 2018-07-13: DirectX11: Fixed unreleased resources in Init and Shutdown functions.
-// 2018-06-08: Misc: Extracted imgui_impl_dx11.cpp/.h away from the old combined DX11+Win32 example.
-// 2018-06-08: DirectX11: Use draw_data->DisplayPos and draw_data->DisplaySize to setup projection matrix and clipping rectangle.
-// 2018-02-16: Misc: Obsoleted the io.RenderDrawListsFn callback and exposed ImGui_ImplDX11_RenderDrawData() in the .h file so you can call it yourself.
-// 2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
-// 2016-05-07: DirectX11: Disabling depth-write.
+//2023-XX-XX: Platform: Added support for multiple windows via the ImGuiPlatformIO interface.
+//2022-10-11: Using 'nullptr' instead of 'NULL' as per our switch to C++11.
+//2021-06-29: Reorganized backend to pull data from a single structure to facilitate usage with multiple-contexts (all g_XXXX access changed to bd->XXXX).
+//2021-05-19: DirectX11: Replaced direct access to ImDrawCmd::TextureId with a call to ImDrawCmd::GetTexID(). (will become a requirement)
+//2021-02-18: DirectX11: Change blending equation to preserve alpha in output buffer.
+//2019-08-01: DirectX11: Fixed code querying the Geometry Shader state (would generally error with Debug layer enabled).
+//2019-07-21: DirectX11: Backup, clear and restore Geometry Shader is any is bound when calling ImGui_ImplDX10_RenderDrawData. Clearing Hull/Domain/Compute shaders without backup/restore.
+//2019-05-29: DirectX11: Added support for large mesh (64K+ vertices), enable ImGuiBackendFlags_RendererHasVtxOffset flag.
+//2019-04-30: DirectX11: Added support for special ImDrawCallback_ResetRenderState callback to reset render state.
+//2018-12-03: Misc: Added #pragma comment statement to automatically link with d3dcompiler.lib when using D3DCompile().
+//2018-11-30: Misc: Setting up io.BackendRendererName so it can be displayed in the About Window.
+//2018-08-01: DirectX11: Querying for IDXGIFactory instead of IDXGIFactory1 to increase compatibility.
+//2018-07-13: DirectX11: Fixed unreleased resources in Init and Shutdown functions.
+//2018-06-08: Misc: Extracted imgui_impl_dx11.cpp/.h away from the old combined DX11+Win32 example.
+//2018-06-08: DirectX11: Use draw_data->DisplayPos and draw_data->DisplaySize to setup projection matrix and clipping rectangle.
+//2018-02-16: Misc: Obsoleted the io.RenderDrawListsFn callback and exposed ImGui_ImplDX11_RenderDrawData() in the .h file so you can call it yourself.
+//2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
+//2016-05-07: DirectX11: Disabling depth-write.
 
 #include "imgui.h"
 #include "imgui_impl_dx11.h"
@@ -382,8 +382,8 @@ bool    ImGui_ImplDX11_CreateDeviceObjects()
 
     //By using D3DCompile() from <d3dcompiler.h> / d3dcompiler.lib, we introduce a dependency to a given version of d3dcompiler_XX.dll (see D3DCOMPILER_DLL_A)
     //If you would like to use this DX11 sample code but remove this dependency you can:
-    // 1) compile once, save the compiled shader blobs into a file or source code and pass them to CreateVertexShader()/CreatePixelShader() [preferred solution]
-    // 2) use code to detect any version of the DLL and grab a pointer to D3DCompile from the DLL.
+    //1) compile once, save the compiled shader blobs into a file or source code and pass them to CreateVertexShader()/CreatePixelShader() [preferred solution]
+    //2) use code to detect any version of the DLL and grab a pointer to D3DCompile from the DLL.
     //See https://github.com/ocornut/imgui/pull/638 for sources and details.
 
     //Create the vertex shader

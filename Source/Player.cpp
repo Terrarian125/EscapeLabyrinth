@@ -17,8 +17,8 @@ void Player::Update() {
     float playerRadius = 50.0f; //プレイヤーの当たり判定の大きさ（半径）
 
     //旋回
-    if (Input::IsKeepKeyDown(KEY_INPUT_LEFT))  m_angle -= rotSpeed;
-    if (Input::IsKeepKeyDown(KEY_INPUT_RIGHT)) m_angle += rotSpeed;
+    if (Input::IsKeepKeyDown(KEY_INPUT_A))  m_angle -= rotSpeed;
+    if (Input::IsKeepKeyDown(KEY_INPUT_D)) m_angle += rotSpeed;
 
     //移動ベクトルの計算
     float nx = sinf(m_angle);
@@ -34,6 +34,14 @@ void Player::Update() {
         nextPos.x -= nx * moveSpeed;
         nextPos.z -= nz * moveSpeed;
     }
+
+	//デバッグ用に上昇と下降も追加
+	if (Input::IsKeepKeyDown(KEY_INPUT_UP)) {
+		nextPos.y += moveSpeed;
+	}
+	if (Input::IsKeepKeyDown(KEY_INPUT_DOWN)) {
+		nextPos.y -= moveSpeed;
+	}
 
     //当たり判定処理
     //Stageクラスを探してマップデータを参照する
