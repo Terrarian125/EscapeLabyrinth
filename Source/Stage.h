@@ -19,7 +19,6 @@ private:
     void Dig(int x, int y);            //穴掘り法（再帰）
     void BreakWalls(int breakCount);    //ループ作成用の壁破壊
     void PlaceEnemies();               //敵の配置
-	void WidenPaths();              //通路を広げる
     void DrawMinimap();                   //ミニマップの描画
 
     int m_mazeData[STAGE_HEIGHT][STAGE_WIDTH]; //0:通路, 1:壁
@@ -27,6 +26,10 @@ private:
     int m_floorGraph; //床の画像ハンドル
     int m_wallGraph;  //壁の画像ハンドル
 	int m_bgGraph; //背景の画像ハンドル
+
+    int m_keyGraph;      // 鍵の画像用
+    bool m_hasKey;       // 鍵を拾ったかどうかのフラグ
+    VECTOR m_keyPos;     // 鍵を置く座標
 
     float bgScrollX;
 };

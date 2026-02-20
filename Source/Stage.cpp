@@ -10,6 +10,21 @@ Stage::Stage() {
     m_floorGraph = LoadGraph("Data/Image/floor.png");
     m_wallGraph = LoadGraph("Data/Image/wall.png");
 	m_bgGraph = LoadGraph("Data/Image/bg.png");
+    m_keyGraph = LoadGraph("Data/Image/key.png"); //鍵の画像を用意
+    m_hasKey = false;
+
+    //鍵の配置ロジック
+    bool placed = false;
+    //右下の方から逆順にループを回して、最初に見つかった通路(0)に置く
+    for (int y = STAGE_HEIGHT - 2; y > 0 && !placed; y--) {
+        for (int x = STAGE_WIDTH - 2; x > 0 && !placed; x--) {
+            if (m_mazeData[y][x] == 0) { //そこが通路なら
+                //マスの中心に配置
+                m_keyPos = VGet(x * STAGE_SCALE, 20.0f, y * STAGE_SCALE);
+                placed = true;
+            }
+        }
+    }
 }
 
 Stage::~Stage() {}
@@ -104,19 +119,6 @@ void Stage::PlaceEnemies() {
     }
 }
 
-void Stage::WidenPaths()//ボツ
-{
-    //for (int y = 1; y < STAGE_HEIGHT - 1; y++) {
-    // for (int x = 1; x < STAGE_WIDTH - 1; x++) {
-    //     if (m_mazeData[y][x] == 0) { //もし通路なら
-    //         //上下左右をチェックして、30%くらいの確率で道にする
-    //         if (GetRand(100) < 30) m_mazeData[y + 1][x] = 0;
-    //         if (GetRand(100) < 30) m_mazeData[y][x + 1] = 0;
-    //     }
-    // }
-    //}
-}
-
 void Stage::DrawMinimap() {
     int mapSize = 15;
     int range = 7;
@@ -147,12 +149,26 @@ void Stage::DrawMinimap() {
     }
 
     //プレイヤーを描画
-    // 中心位置を計算
+    //中心位置を計算
     int centerX = offsetX + range * mapSize + mapSize / 2;
     int centerY = offsetY + range * mapSize + mapSize / 2;
 
-    // プレイヤーを赤い円で表示
+    //プレイヤーを赤い円で表示
     DrawCircle(centerX, centerY, mapSize / 3, GetColor(255, 0, 0), TRUE);
+
+    //鍵を拾っていなければ、ミニマップに「黄色い〇」を出す
+    if (!m_hasKey) {
+        //ワールド座標からマスのインデックス(x, y)を正確に逆算
+        int kx = static_cast<int>(m_keyPos.x / STAGE_SCALE);
+        int kz = static_cast<int>(m_keyPos.z / STAGE_SCALE);
+
+        //壁の描画ループで使っている「drawX/Y」と同じ計算式を使う
+        int drawX = offsetX + (kx - (px - range)) * mapSize;
+        int drawY = offsetY + (kz - (pz - range)) * mapSize;
+
+        //マスの中心に点を出すために mapSize/2 を足す
+        DrawCircle(drawX + mapSize / 2, drawY + mapSize / 2, mapSize / 4, GetColor(255, 255, 0), TRUE);
+    }
 }
 
 void Stage::Update() {
@@ -163,21 +179,37 @@ void Stage::Update() {
     if (bgScrollX <= -Screen::WIDTH) {
         bgScrollX = 0.0f;
     }
+
+    if (m_hasKey) return;
+
+    Player* player = FindGameObject<Player>();
+    if (player) {
+        VECTOR pPos = player->GetPosition();
+        //プレイヤーと鍵の距離を測る
+        float dist = VSize(VSub(pPos, m_keyPos));
+
+        //50ユニット以内に近づいたら拾ったことにする
+        if (dist < 50.0f) {
+            m_hasKey = true;
+            //取得音
+			//PlaySoundMem(LoadSoundMem("key_get.mp3"), DX_PLAYTYPE_BACK);
+        }
+    }
 }
 
 void Stage::Draw() {
-    // 1枚目
+    //1枚目
     DrawExtendGraph((int)bgScrollX, 0, (int)bgScrollX + 1280, 720, m_bgGraph, FALSE);
-    // 2枚目（右側に連結）
+    //2枚目（右側に連結）
     DrawExtendGraph((int)bgScrollX + 1280, 0, (int)bgScrollX + 2560, 720, m_bgGraph, FALSE);
 
-    // 3D描画のためのZバッファ初期化
+    //3D描画のためのZバッファ初期化
     ClearDrawScreenZBuffer();
 
     float scale = STAGE_SCALE;
     float half = scale / 2.0f;
 
-    // ライト設定（前回同様）
+    //ライト設定（前回同様）
     SetLightDirection(VGet(-1.0f, -1.0f, -1.0f));
     COLOR_F amb = { 0.5f, 0.5f, 0.5f, 1.0f };
     SetLightAmbColor(amb);
@@ -196,7 +228,7 @@ void Stage::Draw() {
 
             //壁の描画
             if (m_mazeData[y][x] == 1) {
-                // 前面 (手前)
+                //前面 (手前)
                 DrawQuadGraph3D(
                     VGet(cx - half, scale, cz - half), VGet(cx + half, scale, cz - half),
                     VGet(cx + half, 0.0f, cz - half), VGet(cx - half, 0.0f, cz - half),
@@ -228,6 +260,10 @@ void Stage::Draw() {
                 );
             }
         }
+    }
+    if (!m_hasKey) {
+        //ちょっと回転させたり上下させると「アイテム感」が出ます
+        DrawBillboard3D(m_keyPos, 0.5f, 0.5f, 50.0f, 0.0f, m_keyGraph, TRUE);
     }
     DrawMinimap();
 }
