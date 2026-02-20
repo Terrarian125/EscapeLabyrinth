@@ -1,0 +1,3 @@
+ID,JobType,ModelName,TexFolder,VoiceFolder,Anim_Idle,Anim_Walk,Anim_Run,Anim_Atk_M1,Anim_Atk_M2,Anim_Atk_R,Anim_Magic,Anim_Guard,Anim_Damage,Anim_Dead,Anim_Abnormal
+TEST_01,,PC.mv1,,,Anim_Neutral.mv1,Anim_Walk.mv1,Anim_Run.mv1,Anim_Attack1.mv1,Anim_Attack2.mv1,Anim_Guard_In.mv1,Anim_Attack3.mv1,Anim_Guard_In.mv1,Anim_Damage.mv1,Anim_Down_Loop.mv1,Anim_Jump_Loop.mv1
+NPC_SATO,,,,,,,,,,,,,,,
