@@ -7,6 +7,7 @@
 
 Stage::Stage() {
     GenerateMaze();
+	m_collisionEnable = true;//当たり判定は最初は有効にしておく
     m_floorGraph = LoadGraph("Data/Image/floor.png");
     m_wallGraph = LoadGraph("Data/Image/wall.png");
 	m_bgGraph = LoadGraph("Data/Image/bg.png");
@@ -314,6 +315,7 @@ void Stage::Draw() {
 
 //外部（敵のAIなど）から道かどうかを判定するための関数
 int Stage::GetMazeData(int x, int y) const {
+    if (!m_collisionEnable) return 0;
     if (x < 0 || x >= STAGE_WIDTH || y < 0 || y >= STAGE_HEIGHT) return 1;
 
     int data = m_mazeData[y][x];

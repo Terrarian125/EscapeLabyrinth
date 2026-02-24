@@ -23,6 +23,7 @@
 //自作Inputをインクルード
 #include "../Library/Input.h" 
 #include "../Library/GameSetting.h"
+#include "../Source/DebugWindow.h"
 #define CoGVersion (4.1)
 
 bool isGameClear = false;//ゲームクリアフラグ（プレイヤーが出口に到達したかどうか）
@@ -74,6 +75,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		Input::MouseStateUpdate();
 
 		AppUpdate();
+		DebugWindow::Update();
 
 		if (ProcessMessage() == -1 || AppIsExit()) {
 			break;

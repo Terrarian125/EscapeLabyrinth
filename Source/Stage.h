@@ -14,6 +14,14 @@ public:
     //外部（敵のAIなど）から道かどうかを判定するための関数
     int GetMazeData(int x, int y) const;
 
+    //デバッグ用
+    //当たり判定の有効・無効を切り替える関数
+    void SetCollisionEnable(bool enable) { m_collisionEnable = enable; }
+    bool GetCollisionEnable() const { return m_collisionEnable; }
+    //鍵の状態
+    bool GetHasKey() const { return m_hasKey; }
+    void SetHasKey(bool has) { m_hasKey = has; }
+
 private:
     void GenerateMaze();                //迷路生成メイン処理
     void Dig(int x, int y);            //穴掘り法（再帰）
@@ -42,4 +50,6 @@ private:
 	Compass m_compass;
 
     float bgScrollX;
+
+	bool m_collisionEnable;//当たり判定の有効・無効フラグ（デバッグ用）
 };
