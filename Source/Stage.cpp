@@ -11,7 +11,15 @@ Stage::Stage() {
     m_wallGraph = LoadGraph("Data/Image/wall.png");
 	m_bgGraph = LoadGraph("Data/Image/bg.png");
     m_keyGraph = LoadGraph("Data/Image/key.png"); //鍵の画像を用意
+	m_seKeyGet = LoadSoundMem("Data/Sound/key_get.wav"); //鍵を拾う音
     m_hasKey = false;
+    m_doorGraph = LoadGraph("Data/Image/door.png"); //閉じた扉の画像
+	m_doorOpenGraph = LoadGraph("Data/Image/door_open.png"); //開いた扉の画像
+	m_seDoorOpen = LoadSoundMem("Data/Sound/door_open.wav"); //扉が開く音
+    //出口を (1, 1) のすぐ近くの外壁に設置
+    m_exitX = 0;
+    m_exitY = 1;
+    m_mazeData[m_exitY][m_exitX] = 2; //出口を2として区別する
 
     //鍵の配置ロジック
     bool placed = false;
@@ -133,12 +141,23 @@ void Stage::DrawMinimap() {
     int px = static_cast<int>((pPos.x + STAGE_SCALE / 2.0f) / STAGE_SCALE);
     int pz = static_cast<int>((pPos.z + STAGE_SCALE / 2.0f) / STAGE_SCALE);
 
-    //壁と通路を描画
+    // 壁と通路と扉を描画
     for (int y = pz - range; y <= pz + range; y++) {
         for (int x = px - range; x <= px + range; x++) {
             if (x < 0 || x >= STAGE_WIDTH || y < 0 || y >= STAGE_HEIGHT) continue;
 
-            unsigned int color = (m_mazeData[y][x] == 1) ? GetColor(150, 150, 150) : GetColor(30, 30, 30);
+            int data = m_mazeData[y][x];
+            unsigned int color;
+
+            if (data == 1) {
+                color = GetColor(150, 150, 150); //壁：グレー
+            }
+            else if (data == 2) {
+                color = GetColor(0, 255, 255);   //扉：シアン
+            }
+            else {
+                color = GetColor(30, 30, 30);    //通路：黒に近いグレー
+            }
 
             int drawX = offsetX + (x - (px - range)) * mapSize;
             int drawY = offsetY + (y - (pz - range)) * mapSize;
@@ -188,11 +207,12 @@ void Stage::Update() {
         //プレイヤーと鍵の距離を測る
         float dist = VSize(VSub(pPos, m_keyPos));
 
-        //50ユニット以内に近づいたら拾ったことにする
-        if (dist < 50.0f) {
+		//距離が近ければ鍵を拾う
+        if (dist < 100.0f) {
             m_hasKey = true;
             //取得音
-			//PlaySoundMem(LoadSoundMem("key_get.mp3"), DX_PLAYTYPE_BACK);
+            PlaySoundMem(m_seKeyGet, DX_PLAYTYPE_BACK);
+			PlaySoundMem(m_seDoorOpen, DX_PLAYTYPE_BACK);//扉が開く音も同時に鳴らす
         }
     }
 }
@@ -209,7 +229,7 @@ void Stage::Draw() {
     float scale = STAGE_SCALE;
     float half = scale / 2.0f;
 
-    //ライト設定（前回同様）
+    //ライト設定
     SetLightDirection(VGet(-1.0f, -1.0f, -1.0f));
     COLOR_F amb = { 0.5f, 0.5f, 0.5f, 1.0f };
     SetLightAmbColor(amb);
@@ -226,44 +246,60 @@ void Stage::Draw() {
                 m_floorGraph, TRUE
             );
 
-            //壁の描画
-            if (m_mazeData[y][x] == 1) {
-                //前面 (手前)
-                DrawQuadGraph3D(
-                    VGet(cx - half, scale, cz - half), VGet(cx + half, scale, cz - half),
+            //壁と扉の描画判定
+            int data = m_mazeData[y][x];
+            if (data == 1 || data == 2) {
+
+                int useGraph = (data == 2) ? m_doorGraph : m_wallGraph;
+                //出口かつ鍵を持っていれば描画をスキップ
+                if (data == 2 && m_hasKey) {
+                    useGraph = m_doorOpenGraph;
+                }
+
+                // 前面
+                DrawQuadGraph3D(VGet(cx - half, scale, cz - half), VGet(cx + half, scale, cz - half),
                     VGet(cx + half, 0.0f, cz - half), VGet(cx - half, 0.0f, cz - half),
-                    m_wallGraph, TRUE
-                );
+                    useGraph, TRUE);
+
                 //背面 (奥)
-                DrawQuadGraph3D(
-                    VGet(cx + half, scale, cz + half), VGet(cx - half, scale, cz + half),
-                    VGet(cx - half, 0.0f, cz + half), VGet(cx + half, 0.0f, cz + half),
-                    m_wallGraph, TRUE
-                );
+                DrawQuadGraph3D(VGet(cx + half, scale, cz + half), VGet(cx - half, scale, cz + half), VGet(cx - half, 0.0f, cz + half), VGet(cx + half, 0.0f, cz + half), useGraph, TRUE);
                 //右面
-                DrawQuadGraph3D(
-                    VGet(cx + half, scale, cz - half), VGet(cx + half, scale, cz + half),
-                    VGet(cx + half, 0.0f, cz + half), VGet(cx + half, 0.0f, cz - half),
-                    m_wallGraph, TRUE
-                );
+                DrawQuadGraph3D(VGet(cx + half, scale, cz - half), VGet(cx + half, scale, cz + half), VGet(cx + half, 0.0f, cz + half), VGet(cx + half, 0.0f, cz - half), useGraph, TRUE);
                 //左面
-                DrawQuadGraph3D(
-                    VGet(cx - half, scale, cz + half), VGet(cx - half, scale, cz - half),
-                    VGet(cx - half, 0.0f, cz - half), VGet(cx - half, 0.0f, cz + half),
-                    m_wallGraph, TRUE
-                );
+                DrawQuadGraph3D(VGet(cx - half, scale, cz + half), VGet(cx - half, scale, cz - half), VGet(cx - half, 0.0f, cz - half), VGet(cx - half, 0.0f, cz + half), useGraph, TRUE);
                 //天面 (上)
-                DrawQuadGraph3D(
-                    VGet(cx - half, scale, cz + half), VGet(cx + half, scale, cz + half),
-                    VGet(cx + half, scale, cz - half), VGet(cx - half, scale, cz - half),
-                    m_wallGraph, TRUE
-                );
+                DrawQuadGraph3D(VGet(cx - half, scale, cz + half), VGet(cx + half, scale, cz + half), VGet(cx + half, scale, cz - half), VGet(cx - half, scale, cz - half), useGraph, TRUE);
             }
         }
     }
+
+    //鍵の描画
     if (!m_hasKey) {
-        //ちょっと回転させたり上下させると「アイテム感」が出ます
-        DrawBillboard3D(m_keyPos, 0.5f, 0.5f, 50.0f, 0.0f, m_keyGraph, TRUE);
+		static float keyRotation = 0.0f;
+		keyRotation += 0.05f;//回転速度
+		float size = 100.0f;//鍵の大きさ
+		float height = 40.0f;//鍵の地面からの高さ
+		float halfSize = size / 2.0f;//鍵の半分の大きさ
+		float s = sinf(keyRotation) * halfSize;//回転に合わせて左右に揺れる量
+		float c = cosf(keyRotation) * halfSize;//回転に合わせて前後に揺れる量
+
+        VECTOR p1 = VAdd(m_keyPos, VGet(-c, size + height, -s));
+        VECTOR p2 = VAdd(m_keyPos, VGet(c, size + height, s));
+        VECTOR p3 = VAdd(m_keyPos, VGet(c, height, s));
+        VECTOR p4 = VAdd(m_keyPos, VGet(-c, height, -s));
+
+        DrawQuadGraph3D(p1, p2, p3, p4, m_keyGraph, TRUE);
     }
     DrawMinimap();
+}
+
+//外部（敵のAIなど）から道かどうかを判定するための関数
+int Stage::GetMazeData(int x, int y) const {
+    if (x < 0 || x >= STAGE_WIDTH || y < 0 || y >= STAGE_HEIGHT) return 1;
+
+    int data = m_mazeData[y][x];
+    if (data == 2) {
+        return m_hasKey ? 0 : 1;
+    }
+    return data;
 }

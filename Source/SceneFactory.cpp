@@ -6,6 +6,7 @@
 #include "TestScene.h"
 #include "PlayScene.h"
 #include "SettingScene.h"
+#include "ClearScene.h"
 //#include "CustomCharacterScene.h"
 
 
@@ -26,19 +27,10 @@ SceneBase * SceneFactory::Create(const std::string & name){
 	if (name == "SETTING") {
 		return new SettingScene();
 	}
-	//if (name == "CUSTOMCHARACTER") {
-	//	return new CustomCharacterScene();
-	//}
+	if (name == "CLEAR") {
+		return new ClearScene();
+	}
 
-	//if (name == ""){
-	//	return new ();
-	//}
-	//if (name == ""){
-	//	return new ();
-	//}
-	//if (name == ""){
-	//	return new ();
-	//}
 	MessageBox(NULL, ("éüÇÃÉVÅ[ÉìÇÕÇ†ÇËÇ‹ÇπÇÒ\n" + name).c_str(), "SceneFactory", MB_ICONERROR | MB_OK);
 	assert(false);
 	return nullptr;

@@ -43,19 +43,46 @@ void Player::Update() {
 		nextPos.y -= moveSpeed;
 	}
 
+    // 出口に到達したかチェック
+    if (m_pos.x < -100.0f) {
+        SceneManager::ChangeScene("CLEAR"); //クリアシーンに
+    }
+
     //当たり判定処理
-    //Stageクラスを探してマップデータを参照する
+    //壁で操作が止まらないように滑らせる
     Stage* stage = FindGameObject<Stage>();
     if (stage) {
-        //ワールド座標(float)をマップのインデックス(int)に変換
-        //STAGE_SCALE (400) で割り、四捨五入（+0.5f）してマス目を特定
-        int mapX = static_cast<int>((nextPos.x + STAGE_SCALE / 2.0f) / STAGE_SCALE);
-        int mapZ = static_cast<int>((nextPos.z + STAGE_SCALE / 2.0f) / STAGE_SCALE);
+        //X方向 だけ動かしてみて、壁に当たらないかチェック
+        VECTOR nextPosX = m_pos;
+        nextPosX.x = nextPos.x;
 
-        //移動先のマスが壁(1)でないなら、座標を更新する
-        if (stage->GetMazeData(mapX, mapZ) == 0) {
-            m_pos = nextPos;
+        bool canMoveX = true;
+        float checkX[] = { nextPosX.x + playerRadius, nextPosX.x - playerRadius, nextPosX.x, nextPosX.x };
+        float checkZ_forX[] = { m_pos.z, m_pos.z, m_pos.z + playerRadius, m_pos.z - playerRadius };
+
+        for (int i = 0; i < 4; i++) {
+            int mx = static_cast<int>((checkX[i] + STAGE_SCALE / 2.0f) / STAGE_SCALE);
+            int mz = static_cast<int>((checkZ_forX[i] + STAGE_SCALE / 2.0f) / STAGE_SCALE);
+            if (stage->GetMazeData(mx, mz) != 0) { canMoveX = false; break; }
         }
-        //壁だった場合は m_pos を更新しない（＝止まる）
+        if (canMoveX) m_pos.x = nextPos.x;
+
+        //Z方向 だけ動かしてみて、壁に当たらないかチェック
+        VECTOR nextPosZ = m_pos;
+        nextPosZ.z = nextPos.z;
+
+        bool canMoveZ = true;
+        float checkX_forZ[] = { m_pos.x + playerRadius, m_pos.x - playerRadius, m_pos.x, m_pos.x };
+        float checkZ[] = { nextPosZ.z, nextPosZ.z, nextPosZ.z + playerRadius, nextPosZ.z - playerRadius };
+
+        for (int i = 0; i < 4; i++) {
+            int mx = static_cast<int>((checkX_forZ[i] + STAGE_SCALE / 2.0f) / STAGE_SCALE);
+            int mz = static_cast<int>((checkZ[i] + STAGE_SCALE / 2.0f) / STAGE_SCALE);
+            if (stage->GetMazeData(mx, mz) != 0) { canMoveZ = false; break; }
+        }
+        if (canMoveZ) m_pos.z = nextPos.z;
+
+        // Y方向は自由（デバッグ用）
+        m_pos.y = nextPos.y;
     }
 }

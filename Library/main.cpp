@@ -18,10 +18,14 @@
 #include "../Source/Screen.h"
 #include "../ImGui/imgui_impl_dxlib.hpp"
 
+#include "../Source/global.h"
+
 //自作Inputをインクルード
 #include "../Library/Input.h" 
 #include "../Library/GameSetting.h"
 #define CoGVersion (4.1)
+
+bool isGameClear = false;//ゲームクリアフラグ（プレイヤーが出口に到達したかどうか）
 
 //プログラムは WinMain から始まります
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)

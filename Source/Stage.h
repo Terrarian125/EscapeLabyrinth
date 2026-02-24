@@ -7,12 +7,11 @@ class Stage : public GameObject {
 public:
     Stage();
     virtual ~Stage();
-
     void Update() override;
     void Draw() override;
 
     //外部（敵のAIなど）から道かどうかを判定するための関数
-    int GetMazeData(int x, int y) const { return m_mazeData[y][x]; }
+    int GetMazeData(int x, int y) const;
 
 private:
     void GenerateMaze();                //迷路生成メイン処理
@@ -27,9 +26,16 @@ private:
     int m_wallGraph;  //壁の画像ハンドル
 	int m_bgGraph; //背景の画像ハンドル
 
-    int m_keyGraph;      // 鍵の画像用
-    bool m_hasKey;       // 鍵を拾ったかどうかのフラグ
-    VECTOR m_keyPos;     // 鍵を置く座標
+    int m_keyGraph;      //鍵の画像用
+    bool m_hasKey;       //鍵を拾ったかどうかのフラグ
+    int m_seKeyGet;   //鍵を拾った音
+    VECTOR m_keyPos;     //鍵を置く座標
+
+    //出口
+	int m_doorGraph; //閉じた扉の画像ハンドル
+    int m_doorOpenGraph; //開いた扉の画像ハンドル
+    int m_exitX, m_exitY; //出口の場所
+    int m_seDoorOpen; //扉が開いた音
 
     float bgScrollX;
 };

@@ -37,3 +37,6 @@ const int STAGE_WIDTH = 29;
 const int STAGE_HEIGHT = 21;
 const int CHA_SIZE = 32; //キャラのサイズ 32*32
 const float STAGE_SCALE = 400.0f;
+
+//ゲームクリアのフラグ
+extern bool isGameClear; // 外部からも参照できるようにする
