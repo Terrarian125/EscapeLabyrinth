@@ -4,5 +4,5 @@ class DebugWindow {
 public:
 	static void Update();
 private:
-    static bool m_isOpen; // F1で切り替える表示フラグ
+    static bool m_isOpen; //F1で切り替える表示フラグ
 };

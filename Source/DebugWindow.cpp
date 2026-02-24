@@ -3,11 +3,12 @@
 #include "../Library/Input.h"
 #include "Stage.h"
 #include "Player.h"
+#include "Enemy.h"
 
 bool DebugWindow::m_isOpen = false;
 
 void DebugWindow::Update() {
-    // F1キーで開閉切り替え
+    //F1キーで開閉切り替え
     if (Input::IsKeyUP(KEY_INPUT_F1)) {
         m_isOpen = !m_isOpen;
     }
@@ -46,6 +47,27 @@ void DebugWindow::Update() {
         }
     }
 
+    //Enemy
+    Enemy* enemy = FindGameObject<Enemy>();
+    if (enemy) {
+        if (ImGui::CollapsingHeader("Enemy")) {
+            //現在のステートを表示
+            const char* stateNames[] = { "Wait", "Chase", "Roam", "Down", "Eat" };
+            ImGui::Text("State: %s", stateNames[(int)enemy->GetState()]);
+
+            ImGui::Text("Current State: %d", (int)enemy->GetState());
+            if (ImGui::Button("Force Down")) {
+                //enemy->SetState(EnemyState::Down); //Enemy側にSetterが必要
+            }
+
+            //座標操作
+            VECTOR ePos = enemy->GetPosition();
+            float pos[3] = { ePos.x, ePos.y, ePos.z };
+            if (ImGui::DragFloat3("Enemy Pos", pos, 1.0f)) {
+                enemy->SetPosition(VGet(pos[0], pos[1], pos[2]));
+            }
+        }
+    }
 
     ImGui::End();
 }

@@ -30,7 +30,7 @@ ClearScene::~ClearScene()
 
 void ClearScene::Update() {
     if (Input::IsKeyUP(KEY_INPUT_R)) {
-		SceneManager::ChangeScene("TITLE"); // Rキーでタイトルに戻る
+		SceneManager::ChangeScene("TITLE"); //Rキーでタイトルに戻る
     }
 }
 

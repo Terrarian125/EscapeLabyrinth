@@ -1,64 +1,89 @@
-//#include "Enemy.h"
-//
-//Enemy::Enemy()
-//{
-//}
-//
-//Enemy::~Enemy()
-//{
-//}
-//
-// void Enemy::Update() {
-//     float dt = Time::DeltaTime(); //Time.hの機能を利用
-//
-//     switch (state) {
-//     case EnemyState::Chase:
-//         UpdateChase();
-//         //プレイヤーに接触
-//         if (IsContactPlayer()) {
-//             state = EnemyState::Eat;
-//             stateTimer = 4.0f;
-//             //Player::ReduceLife(); //ライフ減少処理
-//         }
-//         break;
-//
-//     case EnemyState::Eat:
-//         stateTimer -= dt;
-//         if (stateTimer <= 0) state = EnemyState::Chase;
-//         break;
-//
-//     case EnemyState::Down:
-//         stateTimer -= dt;
-//         if (stateTimer <= 0) {
-//             state = EnemyState::Roam;
-//             ResetEyes(); //目を復活させる
-//         }
-//         break;
-//     }
-// }
-//
-//void Enemy::Draw()
-//{
-//}
-//
-// bool Enemy::CheckHit(VECTOR lineStart, VECTOR lineEnd) {
-//     for (auto& eye : eyes) {
-//         if (!eye.active) continue;
-//
-//         //モデルのボーン（目）の現在のワールド座標を取得
-//         MATRIX m = MV1GetHierarchyWorldMatrix(modelHandle, eye.frameIndex);
-//         VECTOR eyePos = VGet(m.m[3][0], m.m[3][1], m.m[3][2]);
-//
-//         //線分と球の当たり判定
-//         if (HitCheck_Line_Sphere(lineStart, lineEnd, eyePos, eye.radius)) {
-//             eye.active = false;
-//             //全ての目がつぶれたかチェック
-//             if (CheckAllEyesDestroyed()) {
-//                 state = EnemyState::Down;
-//                 stateTimer = 5.0f; //企画書の「一定時間動かない」
-//             }
-//             return true;
-//         }
-//     }
-//     return false;
-// }
+#include "Enemy.h"
+#include "Player.h"
+#include "Stage.h"
+#include "DxLib.h"
+#include <cmath>
+
+Enemy::Enemy() : modelHandle(-1), state(EnemyState::Chase), stateTimer(0.0f) {
+    //敵のモデルをロード
+    modelHandle = MV1LoadModel("Data/Model/Enemy.mv1");
+    MV1SetScale(modelHandle, VGet(0.5f, 0.5f, 0.5f)); //サイズは適宜調整
+}
+
+Enemy::~Enemy() {
+    MV1DeleteModel(modelHandle);
+}
+
+void Enemy::Update() {
+    //プレイヤーの座標を取得
+    Player* player = FindGameObject<Player>();
+    if (!player) return;
+
+    switch (state) {
+    case EnemyState::Chase:
+        UpdateChase();
+        break;
+    case EnemyState::Down:
+        stateTimer -= 0.016f; //Time::DeltaTime()があれば差し替え
+        if (stateTimer <= 0) state = EnemyState::Chase;
+        break;
+    }
+
+    //モデルの位置を更新
+    MV1SetPosition(modelHandle, m_pos);
+}
+
+void Enemy::UpdateChase() {
+    Stage* stage = FindGameObject<Stage>();
+    Player* player = FindGameObject<Player>();
+    if (!player || !stage) return;
+
+    //座標計算ロジック
+    //現在の座標から今どのマスにいるか
+    int curX = static_cast<int>((m_pos.x + STAGE_SCALE / 2.0f) / STAGE_SCALE);
+    int curZ = static_cast<int>((m_pos.z + STAGE_SCALE / 2.0f) / STAGE_SCALE);
+
+    //プレイヤーがどのマスにいるか
+    VECTOR pPos = player->GetPosition();
+    int targetX = static_cast<int>((pPos.x + STAGE_SCALE / 2.0f) / STAGE_SCALE);
+	int targetZ = static_cast<int>((pPos.z + STAGE_SCALE / 2.0f) / STAGE_SCALE);
+
+    //次に進むべきマスを決定（簡易A*的ロジック）
+    int nextX = curX;
+    int nextZ = curZ;
+
+    //X軸の移動を試みる
+    if (curX != targetX) {
+        int dirX = (targetX > curX) ? 1 : -1;
+        if (stage->GetMazeData(curX + dirX, curZ) == 0) { //通路なら
+            nextX = curX + dirX;
+        }
+    }
+    //Xが壁だった、またはX移動が不要ならZ軸を試みる
+    if (nextX == curX && curZ != targetZ) {
+        int dirZ = (targetZ > curZ) ? 1 : -1;
+        if (stage->GetMazeData(curX, curZ + dirZ) == 0) { //通路なら
+            nextZ = curZ + dirZ;
+        }
+    }
+
+    //次のマスの中心を目標座標にする
+    VECTOR nextTargetPos = VGet(nextX * STAGE_SCALE, 0.0f, nextZ * STAGE_SCALE);
+    VECTOR moveVec = VSub(nextTargetPos, m_pos);
+
+    //目標に向かって少しずつ移動
+    float dist = VSize(moveVec);
+    if (dist > 5.0f) {
+        m_pos = VAdd(m_pos, VScale(VNorm(moveVec), 6.0f)); //速度
+    }
+
+    //向きの更新
+    if (dist > 1.0f) {
+        float angle = atan2f(moveVec.x, moveVec.z);
+        MV1SetRotationXYZ(modelHandle, VGet(0.0f, angle + DX_PI_F, 0.0f));
+    }
+}
+
+void Enemy::Draw() {
+    MV1DrawModel(modelHandle);
+}

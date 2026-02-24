@@ -4,6 +4,7 @@
 #include <algorithm>
 #include "Screen.h"
 #include "Player.h"
+#include "Enemy.h"
 
 Stage::Stage() {
     GenerateMaze();
@@ -112,21 +113,17 @@ void Stage::BreakWalls(int breakCount) {
 }
 
 void Stage::PlaceEnemies() {
-    //企画書：出口当たりの中腹ルートに配置
-    //ステージ右下領域 (半分より右・下) を検索
-    Rect area = { STAGE_WIDTH / 2, STAGE_HEIGHT / 2, STAGE_WIDTH / 2 - 2, STAGE_HEIGHT / 2 - 2 };
+    Enemy* enemy = new Enemy();
 
-    int attempts = 0;
-    while (attempts < 100) {
-        int rx = GetRand(area.w) + area.x;
-        int ry = GetRand(area.h) + area.y;
-
-        if (m_mazeData[ry][rx] == 0) {
-            //VECTOR pos = TileToWorld(rx, ry);
-            //new Enemy(pos); //ここで敵を生成
-            break;
+    //通路を探して配置
+    for (int y = 1; y < STAGE_HEIGHT - 1; y++) {
+        for (int x = 1; x < STAGE_WIDTH - 1; x++) {
+            if (m_mazeData[y][x] == 0) {
+                //プレイヤーから一定距離離れているかチェックするとより良
+                enemy->SetPosition(VGet(x * STAGE_SCALE, 0.0f, y * STAGE_SCALE));
+                return;
+            }
         }
-        attempts++;
     }
 }
 
@@ -144,7 +141,7 @@ void Stage::DrawMinimap() {
     int px = static_cast<int>((pPos.x + STAGE_SCALE / 2.0f) / STAGE_SCALE);
     int pz = static_cast<int>((pPos.z + STAGE_SCALE / 2.0f) / STAGE_SCALE);
 
-    // 壁と通路と扉を描画
+    //壁と通路と扉を描画
     for (int y = pz - range; y <= pz + range; y++) {
         for (int x = px - range; x <= px + range; x++) {
             if (x < 0 || x >= STAGE_WIDTH || y < 0 || y >= STAGE_HEIGHT) continue;
@@ -259,7 +256,7 @@ void Stage::Draw() {
                     useGraph = m_doorOpenGraph;
                 }
 
-                // 前面
+                //前面
                 DrawQuadGraph3D(VGet(cx - half, scale, cz - half), VGet(cx + half, scale, cz - half),
                     VGet(cx + half, 0.0f, cz - half), VGet(cx - half, 0.0f, cz - half),
                     useGraph, TRUE);
@@ -299,18 +296,18 @@ void Stage::Draw() {
     if (player) {
         std::vector<CompassTarget> targets;
 
-        // 鍵を追加（拾っていない場合）
+        //鍵を追加（拾っていない場合）
         if (!m_hasKey) {
             targets.push_back({ m_keyPos, m_keyGraph });
         }
 
-        // 出口を追加
+        //出口を追加
         targets.push_back({ VGet(m_exitX * STAGE_SCALE, 0, m_exitY * STAGE_SCALE), m_doorGraph });
 
-        // 描画実行
+        //描画実行
         m_compass.Draw(player->GetAngle(), player->GetPosition(), targets);
     }
-    DrawMinimap();
+    //DrawMinimap();
 }
 
 //外部（敵のAIなど）から道かどうかを判定するための関数

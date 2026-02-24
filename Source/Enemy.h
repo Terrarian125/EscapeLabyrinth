@@ -1,8 +1,9 @@
 #pragma once
 #include "../Library/GameObject.h"
 #include <vector>
+#include "global.h"
 
-//企画書P6のステート定義
+//ステート定義
 enum class EnemyState {
     Wait, Chase, Roam, Down, Eat
 };
@@ -11,6 +12,14 @@ struct Eye {
     int frameIndex;   //モデルのボーン番号
     bool active;      //まだ破壊されていないか
     float radius;     //当たり判定の大きさ
+};
+
+struct Node {
+    int x, y;
+    float g, h; //g: スタートからのコスト, h: ゴールまでの推定距離
+    Node* parent;
+
+    float f() const { return g + h; } //合計スコア
 };
 
 class Enemy : public GameObject {
@@ -22,6 +31,13 @@ public:
 
     //プレイヤーからの攻撃判定用
     bool CheckHit(VECTOR lineStart, VECTOR lineEnd);
+
+    //座標を設定する関数
+    void SetPosition(VECTOR pos) { m_pos = pos; }
+    //座標を取得する関数（DebugWindow用）
+    VECTOR GetPosition() const { return m_pos; }
+    //状態を取得する関数（DebugWindow用）
+    EnemyState GetState() const { return state; }
 
 private:
     int modelHandle;

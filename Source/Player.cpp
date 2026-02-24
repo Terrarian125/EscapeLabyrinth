@@ -43,7 +43,7 @@ void Player::Update() {
 		nextPos.y -= moveSpeed;
 	}
 
-    // 出口に到達したかチェック
+    //出口に到達したかチェック
     if (m_pos.x < -100.0f) {
         SceneManager::ChangeScene("CLEAR"); //クリアシーンに
     }
@@ -82,7 +82,7 @@ void Player::Update() {
         }
         if (canMoveZ) m_pos.z = nextPos.z;
 
-        // Y方向は自由（デバッグ用）
+        //Y方向は自由（デバッグ用）
         m_pos.y = nextPos.y;
     }
 }

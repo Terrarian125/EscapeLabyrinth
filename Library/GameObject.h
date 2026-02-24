@@ -69,6 +69,10 @@ public:
 	///<param name="_tag">タグ</param>
 	///<returns>同じであればtrue</returns>
 	bool IsTag(std::string _tag) const { return tag == _tag; }
+
+protected:
+	VECTOR m_pos;
+
 private:
 	std::string tag;     //タグ
 	bool destroy;
