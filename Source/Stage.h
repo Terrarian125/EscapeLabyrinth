@@ -2,6 +2,7 @@
 #include "../Library/GameObject.h"
 #include "global.h"
 #include <vector>
+#include "Compass.h"
 
 class Stage : public GameObject {
 public:
@@ -36,6 +37,9 @@ private:
     int m_doorOpenGraph; //開いた扉の画像ハンドル
     int m_exitX, m_exitY; //出口の場所
     int m_seDoorOpen; //扉が開いた音
+
+	//コンパス
+	Compass m_compass;
 
     float bgScrollX;
 };

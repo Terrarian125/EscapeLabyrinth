@@ -162,6 +162,7 @@
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\CharacterDataManager.h" />
     <ClInclude Include="Source\ClearScene.h" />
+    <ClInclude Include="Source\Compass.h" />
     <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\global.h" />
     <ClInclude Include="Source\Player.h" />
@@ -196,6 +197,7 @@
     <ClCompile Include="Source\BootScene.cpp" />
     <ClCompile Include="Source\CharacterDataManager.cpp" />
     <ClCompile Include="Source\ClearScene.cpp" />
+    <ClCompile Include="Source\Compass.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\PlayScene.cpp" />

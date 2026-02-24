@@ -21,6 +21,8 @@ Stage::Stage() {
     m_exitY = 1;
     m_mazeData[m_exitY][m_exitX] = 2; //出口を2として区別する
 
+	m_compass.Init();//コンパスの初期化
+
     //鍵の配置ロジック
     bool placed = false;
     //右下の方から逆順にループを回して、最初に見つかった通路(0)に置く
@@ -289,6 +291,23 @@ void Stage::Draw() {
         VECTOR p4 = VAdd(m_keyPos, VGet(-c, height, -s));
 
         DrawQuadGraph3D(p1, p2, p3, p4, m_keyGraph, TRUE);
+    }
+
+	//コンパスの描画
+    Player* player = FindGameObject<Player>();
+    if (player) {
+        std::vector<CompassTarget> targets;
+
+        // 鍵を追加（拾っていない場合）
+        if (!m_hasKey) {
+            targets.push_back({ m_keyPos, m_keyGraph });
+        }
+
+        // 出口を追加
+        targets.push_back({ VGet(m_exitX * STAGE_SCALE, 0, m_exitY * STAGE_SCALE), m_doorGraph });
+
+        // 描画実行
+        m_compass.Draw(player->GetAngle(), player->GetPosition(), targets);
     }
     DrawMinimap();
 }

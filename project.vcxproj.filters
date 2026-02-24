@@ -89,6 +89,9 @@
     <ClCompile Include="Source\ClearScene.cpp">
       <Filter>Scene\[03]ClearScene</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Compass.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Screen.h" />
@@ -192,6 +195,9 @@
     </ClInclude>
     <ClInclude Include="Source\ClearScene.h">
       <Filter>Scene\[03]ClearScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Compass.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
