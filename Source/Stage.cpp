@@ -137,56 +137,72 @@ void Stage::DrawMinimap() {
     if (!player) return;
 
     VECTOR pPos = player->GetPosition();
-    //座標からインデックスを計算
+
+    //ワールド座標 → マス座標
     int px = static_cast<int>((pPos.x + STAGE_SCALE / 2.0f) / STAGE_SCALE);
     int pz = static_cast<int>((pPos.z + STAGE_SCALE / 2.0f) / STAGE_SCALE);
 
-    //壁と通路と扉を描画
+    //周囲描画
     for (int y = pz - range; y <= pz + range; y++) {
         for (int x = px - range; x <= px + range; x++) {
-            if (x < 0 || x >= STAGE_WIDTH || y < 0 || y >= STAGE_HEIGHT) continue;
+
+            if (x < 0 || x >= STAGE_WIDTH || y < 0 || y >= STAGE_HEIGHT)
+                continue;
 
             int data = m_mazeData[y][x];
             unsigned int color;
 
             if (data == 1) {
-                color = GetColor(150, 150, 150); //壁：グレー
+                color = GetColor(150, 150, 150);   //壁
             }
             else if (data == 2) {
-                color = GetColor(0, 255, 255);   //扉：シアン
+                color = GetColor(0, 255, 255);     //扉
             }
             else {
-                color = GetColor(30, 30, 30);    //通路：黒に近いグレー
+                color = GetColor(30, 30, 30);      //通路
             }
 
-            int drawX = offsetX + (x - (px - range)) * mapSize;
-            int drawY = offsetY + (y - (pz - range)) * mapSize;
+            //プレイヤーとの差分を使う
+            int dx = x - px;
+            int dy = y - pz;
 
-            DrawBox(drawX, drawY, drawX + mapSize, drawY + mapSize, color, TRUE);
-            DrawBox(drawX, drawY, drawX + mapSize, drawY + mapSize, GetColor(0, 0, 0), FALSE);
+            //Xを反転
+            int drawX = offsetX + (range - dx) * mapSize;
+            int drawY = offsetY + (range + dy) * mapSize;
+
+            DrawBox(drawX, drawY,
+                drawX + mapSize, drawY + mapSize,
+                color, TRUE);
+
+            DrawBox(drawX, drawY,
+                drawX + mapSize, drawY + mapSize,
+                GetColor(0, 0, 0), FALSE);
         }
     }
 
-    //プレイヤーを描画
-    //中心位置を計算
+    //プレイヤーは常に中央
     int centerX = offsetX + range * mapSize + mapSize / 2;
     int centerY = offsetY + range * mapSize + mapSize / 2;
 
-    //プレイヤーを赤い円で表示
-    DrawCircle(centerX, centerY, mapSize / 3, GetColor(255, 0, 0), TRUE);
+    DrawCircle(centerX, centerY, mapSize / 3,
+        GetColor(255, 0, 0), TRUE);
 
-    //鍵を拾っていなければ、ミニマップに「黄色い〇」を出す
+    //鍵表示（未取得時）
     if (!m_hasKey) {
-        //ワールド座標からマスのインデックス(x, y)を正確に逆算
         int kx = static_cast<int>(m_keyPos.x / STAGE_SCALE);
         int kz = static_cast<int>(m_keyPos.z / STAGE_SCALE);
 
-        //壁の描画ループで使っている「drawX/Y」と同じ計算式を使う
-        int drawX = offsetX + (kx - (px - range)) * mapSize;
-        int drawY = offsetY + (kz - (pz - range)) * mapSize;
+        int dx = kx - px;
+        int dy = kz - pz;
 
-        //マスの中心に点を出すために mapSize/2 を足す
-        DrawCircle(drawX + mapSize / 2, drawY + mapSize / 2, mapSize / 4, GetColor(255, 255, 0), TRUE);
+        int drawX = offsetX + (range - dx) * mapSize;
+        int drawY = offsetY + (range + dy) * mapSize;
+
+        DrawCircle(drawX + mapSize / 2,
+            drawY + mapSize / 2,
+            mapSize / 4,
+            GetColor(255, 255, 0),
+            TRUE);
     }
 }
 
@@ -307,7 +323,7 @@ void Stage::Draw() {
         //描画実行
         m_compass.Draw(player->GetAngle(), player->GetPosition(), targets);
     }
-    //DrawMinimap();
+	DrawMinimap();//ミニマップの描画
 }
 
 //外部（敵のAIなど）から道かどうかを判定するための関数
