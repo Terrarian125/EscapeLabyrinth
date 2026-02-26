@@ -5,6 +5,7 @@
 #include "Screen.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "DebugWindow.h"
 
 Stage::Stage() {
     GenerateMaze();
@@ -203,6 +204,27 @@ void Stage::DrawMinimap() {
             mapSize / 4,
             GetColor(255, 255, 0),
             TRUE);
+    }
+
+    //DebugWindowのチェックボックスがONの時だけエネミーを描画
+    if (DebugWindow::ShouldShowEnemy()) {
+        Enemy* enemy = FindGameObject<Enemy>();
+        if (enemy) {
+            VECTOR ePos = enemy->GetPosition();
+            //VECTOR tPos = enemy->GetTargetPos(); // 目標地点を取得
+            int ex = static_cast<int>(ePos.x / STAGE_SCALE);
+            int ez = static_cast<int>(ePos.z / STAGE_SCALE);
+
+            int dx = ex - px;
+            int dy = ez - pz;
+
+            //X反転を適用した座標計算
+            int drawX = offsetX + (range - dx) * mapSize;
+            int drawY = offsetY + (range + dy) * mapSize;
+
+            DrawCircle(drawX + mapSize / 2, drawY + mapSize / 2, mapSize / 3,
+                GetColor(255, 0, 255), TRUE); //敵は紫
+        }
     }
 }
 

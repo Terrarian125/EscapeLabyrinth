@@ -74,7 +74,7 @@ void Enemy::UpdateChase() {
     //目標に向かって少しずつ移動
     float dist = VSize(moveVec);
     if (dist > 5.0f) {
-        m_pos = VAdd(m_pos, VScale(VNorm(moveVec), 6.0f)); //速度
+        m_pos = VAdd(m_pos, VScale(VNorm(moveVec), 8.5f)); //速度
     }
 
     //向きの更新

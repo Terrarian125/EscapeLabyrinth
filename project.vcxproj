@@ -167,6 +167,7 @@
     <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\global.h" />
     <ClInclude Include="Source\Player.h" />
+    <ClInclude Include="Source\PlayUI.h" />
     <ClInclude Include="Source\Screen.h" />
     <ClInclude Include="Source\PlayScene.h" />
     <ClInclude Include="Source\SceneFactory.h" />

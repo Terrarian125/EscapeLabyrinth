@@ -32,12 +32,11 @@ public:
     //プレイヤーからの攻撃判定用
     bool CheckHit(VECTOR lineStart, VECTOR lineEnd);
 
-    //座標を設定する関数
-    void SetPosition(VECTOR pos) { m_pos = pos; }
-    //座標を取得する関数（DebugWindow用）
-    VECTOR GetPosition() const { return m_pos; }
-    //状態を取得する関数（DebugWindow用）
-    EnemyState GetState() const { return state; }
+
+    void SetPosition(VECTOR pos) { m_pos = pos; }//座標を設定する関数
+    VECTOR GetPosition() const { return m_pos; }//座標を取得する関数（DebugWindow用）
+    EnemyState GetState() const { return state; }//状態を取得する関数（DebugWindow用）
+    VECTOR GetTargetPos() const { return m_targetPos; } //現在の目標座標を返す
 
 private:
     int modelHandle;
@@ -47,4 +46,5 @@ private:
 
     void UpdateChase(); //A*探索による追跡ロジック
     void UpdateDown();  //一定時間動かない処理
+    VECTOR m_targetPos; //UpdateChase内で次に向かうマスの中心を入れている変数
 };

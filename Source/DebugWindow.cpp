@@ -6,6 +6,7 @@
 #include "Enemy.h"
 
 bool DebugWindow::m_isOpen = false;
+bool DebugWindow::m_showEnemyOnMap = false;
 
 void DebugWindow::Update() {
     //F1キーで開閉切り替え
@@ -16,6 +17,11 @@ void DebugWindow::Update() {
     if (!m_isOpen) return;
 
     ImGui::Begin("Debug Menu", &m_isOpen);
+
+    //ミニマップ
+    if (ImGui::CollapsingHeader("Minimap Options")) {
+        ImGui::Checkbox("Show Enemy on Minimap", &m_showEnemyOnMap);
+    }
 
     //Playerのデバッグ
     Player* player = FindGameObject<Player>();
@@ -51,6 +57,7 @@ void DebugWindow::Update() {
     Enemy* enemy = FindGameObject<Enemy>();
     if (enemy) {
         if (ImGui::CollapsingHeader("Enemy")) {
+
             //現在のステートを表示
             const char* stateNames[] = { "Wait", "Chase", "Roam", "Down", "Eat" };
             ImGui::Text("State: %s", stateNames[(int)enemy->GetState()]);

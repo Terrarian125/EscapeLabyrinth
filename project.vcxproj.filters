@@ -205,6 +205,9 @@
     <ClInclude Include="Source\DebugWindow.h">
       <Filter>Scene\[99]Debug</Filter>
     </ClInclude>
+    <ClInclude Include="Source\PlayUI.h">
+      <Filter>Scene\[02]PlayScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Library">
