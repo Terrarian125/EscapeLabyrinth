@@ -3,12 +3,15 @@
 #include "ObjectManager.h"
 //#include "Time.h"
 #include <DxLib.h>
-
+#include "../Source/Camera.h"
+#include "../Library/GameObject.h"
 void AppInit()
 {
 	ObjectManager::Init();
 	SceneManager::Init();
 //	Time::Init();
+	Camera* camera = new Camera();
+	ObjectManager::Push(camera);
 }
 
 void AppUpdate()
@@ -20,6 +23,14 @@ void AppUpdate()
 void AppDraw()
 {
 //	Time::Refresh();
+	SceneManager::Draw();
+	ObjectManager::Draw();
+
+	// 先にカメラの座標を適用する
+	Camera* cam = FindGameObject<Camera>();
+	if (cam) cam->Set();
+
+	// その後に描画を呼ぶ
 	SceneManager::Draw();
 	ObjectManager::Draw();
 }

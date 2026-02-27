@@ -22,7 +22,15 @@ public:
     bool GetHasKey() const { return m_hasKey; }
     void SetHasKey(bool has) { m_hasKey = has; }
 
+    //外部から座標を取得するための関数
+    VECTOR GetKeyPosition() const { return m_KeyPos; }
+    VECTOR GetExitPosition() const { return m_ExitPos; }
 private:
+   
+    //座標を保存しておく変数
+    VECTOR m_KeyPos = VGet(0, 0, 0);
+    VECTOR m_ExitPos = VGet(0, 0, 0);
+
     void GenerateMaze();                //迷路生成メイン処理
     void Dig(int x, int y);            //穴掘り法（再帰）
     void BreakWalls(int breakCount);    //ループ作成用の壁破壊

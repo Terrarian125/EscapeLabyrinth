@@ -38,6 +38,7 @@ Stage::Stage() {
             }
         }
     }
+    PlaceEnemies();
 }
 
 Stage::~Stage() {}
@@ -57,9 +58,6 @@ void Stage::GenerateMaze() {
     //穴掘り法だけだと「一本道（木構造）」になり逃げ場がなくなるため、
     //意図的に壁を壊して周回ルートを作ります。
     BreakWalls(12);
-
-    //敵の配置
-    PlaceEnemies();
 }
 
 void Stage::Dig(int x, int y) {
@@ -116,23 +114,18 @@ void Stage::BreakWalls(int breakCount) {
 void Stage::PlaceEnemies() {
     Enemy* enemy = new Enemy();
 
-    //通路を探して配置
-    for (int y = 1; y < STAGE_HEIGHT - 1; y++) {
-        for (int x = 1; x < STAGE_WIDTH - 1; x++) {
-            if (m_mazeData[y][x] == 0) {
-                //プレイヤーから一定距離離れているかチェックするとより良
-                enemy->SetPosition(VGet(x * STAGE_SCALE, 0.0f, y * STAGE_SCALE));
-                return;
-            }
-        }
-    }
+    //鍵の座標を初期位置としてセット
+    enemy->SetPosition(m_keyPos);
+
+    //ObjectManagerに登録
+    ObjectManager::Push(enemy);
 }
 
 void Stage::DrawMinimap() {
-    int mapSize = 15;
-    int range = 7;
-    int offsetX = 1100;
-    int offsetY = 100;
+    int mapSize = DebugWindow::GetMapSize();
+    int range = DebugWindow::GetMapRange();
+    int offsetX = DebugWindow::GetMapOffsetX();
+    int offsetY = DebugWindow::GetMapOffsetY();
 
     Player* player = FindGameObject<Player>();
     if (!player) return;
@@ -345,7 +338,9 @@ void Stage::Draw() {
         //描画実行
         m_compass.Draw(player->GetAngle(), player->GetPosition(), targets);
     }
-	DrawMinimap();//ミニマップの描画
+    if (DebugWindow::ShouldShowMinimap()) {
+        DrawMinimap();
+    }
 }
 
 //外部（敵のAIなど）から道かどうかを判定するための関数

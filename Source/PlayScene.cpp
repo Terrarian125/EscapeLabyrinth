@@ -12,8 +12,8 @@ PlayScene::PlayScene() {
 }
 
 PlayScene::~PlayScene() {
-    //CameraÇ™GameObjectåpè≥Ç≈Ç»Ç¢Ç»ÇÁÇ±Ç±Ç≈è¡Ç∑
-    if (m_camera) { delete m_camera; m_camera = nullptr; }
+    ////CameraÇ™GameObjectåpè≥Ç≈Ç»Ç¢Ç»ÇÁÇ±Ç±Ç≈è¡Ç∑
+    //if (m_camera) { delete m_camera; m_camera = nullptr; }
 }
 
 void PlayScene::Update() {

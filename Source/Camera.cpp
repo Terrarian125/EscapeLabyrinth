@@ -1,6 +1,7 @@
 #include "Camera.h"
 #include <math.h>
 #include "../Library/Input.h"
+#include "Player.h"
 
 Camera::Camera() {
     m_Eye = VGet(0.0f, 200.0f, -500.0f);
@@ -9,6 +10,17 @@ Camera::Camera() {
 }
 
 void Camera::Update() {
+    if (m_IsDebugMode) {
+        Player* player = FindGameObject<Player>();
+        if (player) {
+            VECTOR pPos = player->GetPosition();
+            //プレイヤーの真上 2000.0f に配置
+            m_Eye = VAdd(pPos, VGet(0.0f, 2000.0f, -1.0f));
+            m_Target = pPos; //プレイヤーを注視
+        }
+        return; //デバッグ中は以下の通常移動処理をスキップ
+    }
+
     //回転処理 (Q, E, ←, →)
     if (Input::IsKeepKeyDown(KEY_INPUT_Q) || Input::IsKeepKeyDown(KEY_INPUT_LEFT)) m_Angle -= 0.05f;
     if (Input::IsKeepKeyDown(KEY_INPUT_E) || Input::IsKeepKeyDown(KEY_INPUT_RIGHT)) m_Angle += 0.05f;
@@ -22,6 +34,7 @@ void Camera::Update() {
     float rightZ = cosf(m_Angle + DX_PI_F / 2.0f);
 
     float moveSpeed = 5.0f;
+
 
     //前後移動 (W, S) 向いている方向に進む
     if (!Input::IsKeepKeyDown(KEY_INPUT_LSHIFT)) {
