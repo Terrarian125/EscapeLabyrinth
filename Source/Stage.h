@@ -23,14 +23,9 @@ public:
     void SetHasKey(bool has) { m_hasKey = has; }
 
     //外部から座標を取得するための関数
-    VECTOR GetKeyPosition() const { return m_KeyPos; }
-    VECTOR GetExitPosition() const { return m_ExitPos; }
+    VECTOR GetKeyPosition() const { return m_keyPos; }
+    VECTOR GetExitPosition() const { return m_exitPos; }
 private:
-   
-    //座標を保存しておく変数
-    VECTOR m_KeyPos = VGet(0, 0, 0);
-    VECTOR m_ExitPos = VGet(0, 0, 0);
-
     void GenerateMaze();                //迷路生成メイン処理
     void Dig(int x, int y);            //穴掘り法（再帰）
     void BreakWalls(int breakCount);    //ループ作成用の壁破壊
@@ -47,6 +42,7 @@ private:
     bool m_hasKey;       //鍵を拾ったかどうかのフラグ
     int m_seKeyGet;   //鍵を拾った音
     VECTOR m_keyPos;     //鍵を置く座標
+    VECTOR m_exitPos;    //出口の座標
 
     //出口
 	int m_doorGraph; //閉じた扉の画像ハンドル

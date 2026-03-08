@@ -7,7 +7,7 @@
 #include "PlayScene.h"
 #include "SettingScene.h"
 #include "ClearScene.h"
-//#include "CustomCharacterScene.h"
+#include "EtestScene.h"
 
 
 SceneBase* SceneFactory::CreateFirst(){
@@ -29,6 +29,9 @@ SceneBase * SceneFactory::Create(const std::string & name){
 	}
 	if (name == "CLEAR") {
 		return new ClearScene();
+	}
+	if (name == "ETEST") {
+		return new EtestScene();
 	}
 
 	MessageBox(NULL, ("éüÇÃÉVÅ[ÉìÇÕÇ†ÇËÇ‹ÇπÇÒ\n" + name).c_str(), "SceneFactory", MB_ICONERROR | MB_OK);

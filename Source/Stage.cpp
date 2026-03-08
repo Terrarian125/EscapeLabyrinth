@@ -23,7 +23,7 @@ Stage::Stage() {
     m_exitX = 0;
     m_exitY = 1;
     m_mazeData[m_exitY][m_exitX] = 2; //出口を2として区別する
-
+    m_exitPos = VGet(m_exitX * STAGE_SCALE, 0.0f, m_exitY * STAGE_SCALE);
 	m_compass.Init();//コンパスの初期化
 
     //鍵の配置ロジック

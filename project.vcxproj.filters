@@ -95,6 +95,12 @@
     <ClCompile Include="Source\DebugWindow.cpp">
       <Filter>Scene\[99]Debug</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Etest.cpp">
+      <Filter>Scene\[100]探索テスト</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EtestScene.cpp">
+      <Filter>Scene\[100]探索テスト</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Screen.h" />
@@ -208,6 +214,12 @@
     <ClInclude Include="Source\PlayUI.h">
       <Filter>Scene\[02]PlayScene</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Etest.h">
+      <Filter>Scene\[100]探索テスト</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EtestScene.h">
+      <Filter>Scene\[100]探索テスト</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Library">
@@ -245,6 +257,9 @@
     </Filter>
     <Filter Include="Scene\[99]Debug">
       <UniqueIdentifier>{c9e0881d-fd85-4d98-8e88-12d56f1068fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\[100]探索テスト">
+      <UniqueIdentifier>{f2fc62bd-0aaa-4a74-85cf-fc9a441871ae}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
