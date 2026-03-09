@@ -24,6 +24,10 @@ TitleScene::TitleScene() : currentSelect(0), isExitDialogVisible(false) {
         bw = 300,
         bh = 60;
 
+    auto bEtest = new GuiButton(5, 5, 100, 100, "Œo˜H’Tõ");
+    bEtest->onClick = []() { SceneManager::ChangeScene("ETEST"); };
+    buttons.push_back(bEtest);
+
     auto bNew = new GuiButton(bx, by, bw, bh, "‚Í‚¶‚ß‚©‚ç");
     bNew->onClick = []() { SceneManager::ChangeScene("PLAY"); };
     buttons.push_back(bNew);

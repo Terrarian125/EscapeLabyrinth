@@ -1,6 +1,7 @@
 #pragma once
 #include "../Library/GameObject.h"
 #include "../Library/SceneBase.h"
+#include "../Library/GuiButton.h"
 #include "global.h"
 #include <vector>
 #include <queue>
@@ -36,6 +37,8 @@ public:
     void Update() override;
     void Draw() override;
 
+    //ƒ{ƒ^ƒ“—p
+    std::vector<GuiButton*> buttons;
 private:
     void RunSearch(AlgorithmType type, bool toEnemy = false);
     void Reset();
