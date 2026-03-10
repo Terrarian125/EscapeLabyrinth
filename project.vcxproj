@@ -176,6 +176,7 @@
     <ClInclude Include="Source\SettingPanel.h" />
     <ClInclude Include="Source\SettingScene.h" />
     <ClInclude Include="Source\Stage.h" />
+    <ClInclude Include="Source\StageSelectScene.h" />
     <ClInclude Include="Source\TestScene.h" />
     <ClInclude Include="Source\TitleScene.h" />
   </ItemGroup>
@@ -214,6 +215,7 @@
     <ClCompile Include="Source\SettingPanel.cpp" />
     <ClCompile Include="Source\SettingScene.cpp" />
     <ClCompile Include="Source\Stage.cpp" />
+    <ClCompile Include="Source\StageSelectScene.cpp" />
     <ClCompile Include="Source\TestScene.cpp" />
     <ClCompile Include="Source\TitleScene.cpp" />
   </ItemGroup>

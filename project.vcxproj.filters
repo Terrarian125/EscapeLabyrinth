@@ -14,7 +14,7 @@
       <Filter>Scene\[01]TitleScene</Filter>
     </ClCompile>
     <ClCompile Include="Source\PlayScene.cpp">
-      <Filter>Scene\[02]PlayScene</Filter>
+      <Filter>Scene\[03]PlayScene</Filter>
     </ClCompile>
     <ClCompile Include="ImGui\imgui.cpp">
       <Filter>ImGui</Filter>
@@ -75,22 +75,22 @@
     <ClCompile Include="Source\Animator.cpp" />
     <ClCompile Include="Source\CharacterDataManager.cpp" />
     <ClCompile Include="Source\Enemy.cpp">
-      <Filter>Scene\[02]PlayScene</Filter>
+      <Filter>Scene\[03]PlayScene</Filter>
     </ClCompile>
     <ClCompile Include="Source\Stage.cpp">
-      <Filter>Scene\[02]PlayScene</Filter>
+      <Filter>Scene\[03]PlayScene</Filter>
     </ClCompile>
     <ClCompile Include="Source\Camera.cpp">
-      <Filter>Scene\[02]PlayScene</Filter>
+      <Filter>Scene\[03]PlayScene</Filter>
     </ClCompile>
     <ClCompile Include="Source\Player.cpp">
-      <Filter>Scene\[02]PlayScene</Filter>
+      <Filter>Scene\[03]PlayScene</Filter>
     </ClCompile>
     <ClCompile Include="Source\ClearScene.cpp">
-      <Filter>Scene\[03]ClearScene</Filter>
+      <Filter>Scene\[04]ClearScene</Filter>
     </ClCompile>
     <ClCompile Include="Source\Compass.cpp">
-      <Filter>Scene\[02]PlayScene</Filter>
+      <Filter>Scene\[03]PlayScene</Filter>
     </ClCompile>
     <ClCompile Include="Source\DebugWindow.cpp">
       <Filter>Scene\[99]Debug</Filter>
@@ -100,6 +100,9 @@
     </ClCompile>
     <ClCompile Include="Source\EtestScene.cpp">
       <Filter>Scene\[100]探索テスト</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\StageSelectScene.cpp">
+      <Filter>Scene\[02]StageSelectScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -120,7 +123,7 @@
       <Filter>Scene\[01]TitleScene</Filter>
     </ClInclude>
     <ClInclude Include="Source\PlayScene.h">
-      <Filter>Scene\[02]PlayScene</Filter>
+      <Filter>Scene\[03]PlayScene</Filter>
     </ClInclude>
     <ClInclude Include="ImGui\imconfig.h">
       <Filter>ImGui</Filter>
@@ -191,34 +194,37 @@
     <ClInclude Include="Source\CharacterDataManager.h" />
     <ClInclude Include="Source\Animator.h" />
     <ClInclude Include="Source\Enemy.h">
-      <Filter>Scene\[02]PlayScene</Filter>
+      <Filter>Scene\[03]PlayScene</Filter>
     </ClInclude>
     <ClInclude Include="Source\Stage.h">
-      <Filter>Scene\[02]PlayScene</Filter>
+      <Filter>Scene\[03]PlayScene</Filter>
     </ClInclude>
     <ClInclude Include="Source\Camera.h">
-      <Filter>Scene\[02]PlayScene</Filter>
+      <Filter>Scene\[03]PlayScene</Filter>
     </ClInclude>
     <ClInclude Include="Source\Player.h">
-      <Filter>Scene\[02]PlayScene</Filter>
+      <Filter>Scene\[03]PlayScene</Filter>
     </ClInclude>
     <ClInclude Include="Source\ClearScene.h">
-      <Filter>Scene\[03]ClearScene</Filter>
+      <Filter>Scene\[04]ClearScene</Filter>
     </ClInclude>
     <ClInclude Include="Source\Compass.h">
-      <Filter>Scene\[02]PlayScene</Filter>
+      <Filter>Scene\[03]PlayScene</Filter>
     </ClInclude>
     <ClInclude Include="Source\DebugWindow.h">
       <Filter>Scene\[99]Debug</Filter>
     </ClInclude>
     <ClInclude Include="Source\PlayUI.h">
-      <Filter>Scene\[02]PlayScene</Filter>
+      <Filter>Scene\[03]PlayScene</Filter>
     </ClInclude>
     <ClInclude Include="Source\Etest.h">
       <Filter>Scene\[100]探索テスト</Filter>
     </ClInclude>
     <ClInclude Include="Source\EtestScene.h">
       <Filter>Scene\[100]探索テスト</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StageSelectScene.h">
+      <Filter>Scene\[02]StageSelectScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -240,26 +246,23 @@
     <Filter Include="Scene\[01]TitleScene">
       <UniqueIdentifier>{a52f9c67-9c6c-4376-8f4c-07a10ecbc3db}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scene\[02]PlayScene">
-      <UniqueIdentifier>{8123ada4-16d1-40da-a8f3-3f9e93aafb30}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scene\SettingScene">
       <UniqueIdentifier>{f3336377-db96-4e78-b73c-9abb2ecc8389}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scene\[99]SerialCodeScene">
-      <UniqueIdentifier>{cbd42953-478e-40e0-920e-0497f5a1c78c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scene\[99]GameListScene">
-      <UniqueIdentifier>{c76c09b6-7d42-409e-8481-7a9115b5dc5b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scene\[03]ClearScene">
-      <UniqueIdentifier>{bb59e276-d4db-4d5c-ba64-b5d8ee2e7320}</UniqueIdentifier>
     </Filter>
     <Filter Include="Scene\[99]Debug">
       <UniqueIdentifier>{c9e0881d-fd85-4d98-8e88-12d56f1068fb}</UniqueIdentifier>
     </Filter>
     <Filter Include="Scene\[100]探索テスト">
       <UniqueIdentifier>{f2fc62bd-0aaa-4a74-85cf-fc9a441871ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\[02]StageSelectScene">
+      <UniqueIdentifier>{7e1aded6-ea14-4a99-be90-3c5b45984381}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\[03]PlayScene">
+      <UniqueIdentifier>{8123ada4-16d1-40da-a8f3-3f9e93aafb30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\[04]ClearScene">
+      <UniqueIdentifier>{bb59e276-d4db-4d5c-ba64-b5d8ee2e7320}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
