@@ -204,7 +204,7 @@ void Stage::DrawMinimap() {
         Enemy* enemy = FindGameObject<Enemy>();
         if (enemy) {
             VECTOR ePos = enemy->GetPosition();
-            //VECTOR tPos = enemy->GetTargetPos(); // 目標地点を取得
+            //VECTOR tPos = enemy->GetTargetPos(); //目標地点を取得
             int ex = static_cast<int>(ePos.x / STAGE_SCALE);
             int ez = static_cast<int>(ePos.z / STAGE_SCALE);
 
@@ -239,7 +239,7 @@ void Stage::Update() {
         float dist = VSize(VSub(pPos, m_keyPos));
 
 		//距離が近ければ鍵を拾う
-        if (dist < 100.0f) {
+        if (dist < 300.0f) {
             m_hasKey = true;
             //取得音
             PlaySoundMem(m_seKeyGet, DX_PLAYTYPE_BACK);
@@ -340,6 +340,43 @@ void Stage::Draw() {
     }
     if (DebugWindow::ShouldShowMinimap()) {
         DrawMinimap();
+    }
+
+    //当たり判定可視化
+    if (DebugWindow::ShouldShowCollision()) {
+        //壁の当たり判定 (赤)
+        for (int y = 0; y < STAGE_HEIGHT; y++) {
+            for (int x = 0; x < STAGE_WIDTH; x++) {
+                if (GetMazeData(x, y) == 1) {
+                    float cx = x * STAGE_SCALE;
+                    float cz = y * STAGE_SCALE;
+                    float h = STAGE_SCALE / 2.0f;
+                    DrawCube3D(VGet(cx - h, 0, cz - h), VGet(cx + h, STAGE_SCALE, cz + h),
+                        GetColor(255, 0, 0), GetColor(0, 0, 0), FALSE);
+                }
+            }
+        }
+
+        //プレイヤーの当たり判定 (緑)
+        Player* player = FindGameObject<Player>();
+        if (player) {
+            VECTOR pp = player->GetPosition();
+            //半径50.0fのカプセル
+            DrawCapsule3D(pp, VAdd(pp, VGet(0, 80, 0)), 50.0f, 8, GetColor(0, 255, 0), GetColor(0, 0, 0), FALSE);
+        }
+
+        //エネミーの当たり判定 (紫)
+        Enemy* enemy = FindGameObject<Enemy>();
+        if (enemy) {
+            VECTOR ep = enemy->GetPosition();
+            DrawCapsule3D(ep, VAdd(ep, VGet(0, 100, 0)), 40.0f, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), FALSE);
+        }
+
+        //鍵の当たり判定 (黄)
+        if (!m_hasKey) {
+            //取得距離 100.0f
+            DrawSphere3D(m_keyPos, 100.0f, 10, GetColor(255, 255, 0), GetColor(0, 0, 0), FALSE);
+        }
     }
 }
 

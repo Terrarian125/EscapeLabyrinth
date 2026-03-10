@@ -14,6 +14,7 @@ int DebugWindow::m_minimapOffsetY = 12;
 int DebugWindow::m_minimapTileSize = 17;
 int DebugWindow::m_minimapRange = 7;
 bool DebugWindow::m_showMinimap = true;
+bool DebugWindow::m_showCollision = false;
 
 void DebugWindow::Update() {
     //F1キーで開閉切り替え
@@ -76,21 +77,28 @@ void DebugWindow::Update() {
 
     //Enemy
     Enemy* enemy = FindGameObject<Enemy>();
-    //Stage* stage = FindGameObject<Stage>(); // 座標取得用にStageも取得
+    //Stage* stage = FindGameObject<Stage>(); //座標取得用にStageも取得
 
     if (enemy) {
         if (ImGui::CollapsingHeader("Enemy AI Controller")) {
 
-            // 1. 現在のステートを文字列で分かりやすく表示
+            //座標操作
+            VECTOR ePos = enemy->GetPosition();
+            float pos[3] = { ePos.x, ePos.y, ePos.z };
+            if (ImGui::DragFloat3("Enemy Pos", pos, 5.0f)) {
+                enemy->SetPosition(VGet(pos[0], pos[1], pos[2]));
+            }
+
+            //現在のステートを文字列で分かりやすく表示
             const char* stateNames[] = { "Wait", "Roam", "Chase", "Eat", "Down" };
             int currentState = (int)enemy->GetState();
             ImGui::Text("State: %s", stateNames[currentState]);
 
-            // 2. ステートタイマーの表示（ProgressBarにすると視覚的にわかりやすい）
-            // maxを5.0fとして、残り時間を表示
+            //ステートタイマーの表示（ProgressBarにすると視覚的にわかりやすい）
+            //maxを5.0fとして、残り時間を表示
             ImGui::ProgressBar(enemy->GetStateTimer() / 5.0f, ImVec2(0, 0), "Timer");
 
-            // 3. 各ステートへの強制遷移ボタン
+            //各ステートへの強制遷移ボタン
             if (ImGui::Button("Force WAIT")) { enemy->SetState(EnemyState::Wait); }
             ImGui::SameLine();
             if (ImGui::Button("Force ROAM")) { enemy->SetState(EnemyState::Roam); }
@@ -101,7 +109,7 @@ void DebugWindow::Update() {
 
             ImGui::Separator();
 
-            // 4. A* 経路探索テストモード (鍵 -> 出口)
+            //A* 経路探索テストモード (鍵 -> 出口)
             if (stage) {
                 if (ImGui::Button("A* Test: Key -> Exit Route")) {
                     enemy->StartAStarTest();
@@ -109,13 +117,11 @@ void DebugWindow::Update() {
             }
 
             ImGui::Separator();
-
-            // 5. 座標操作（既存のもの）
-            VECTOR ePos = enemy->GetPosition();
-            float pos[3] = { ePos.x, ePos.y, ePos.z };
-            if (ImGui::DragFloat3("Enemy Pos", pos, 5.0f)) {
-                enemy->SetPosition(VGet(pos[0], pos[1], pos[2]));
-            }
+        }
+        //当たり判定
+        if (ImGui::CollapsingHeader("Collision Debug")) {
+            ImGui::Checkbox("Show 3D Collision Wireframes", &m_showCollision);
+            ImGui::Text("Green: Player / Red: Walls / Yellow: Key");
         }
     }
 

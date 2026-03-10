@@ -26,11 +26,11 @@ void AppDraw()
 	SceneManager::Draw();
 	ObjectManager::Draw();
 
-	// 先にカメラの座標を適用する
+	//先にカメラの座標を適用する
 	Camera* cam = FindGameObject<Camera>();
 	if (cam) cam->Set();
 
-	// その後に描画を呼ぶ
+	//その後に描画を呼ぶ
 	SceneManager::Draw();
 	ObjectManager::Draw();
 }

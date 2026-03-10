@@ -36,12 +36,12 @@ void Player::Update() {
     }
 
 	//デバッグ用に上昇と下降も追加
-	if (Input::IsKeepKeyDown(KEY_INPUT_UP)) {
-		nextPos.y += moveSpeed;
-	}
-	if (Input::IsKeepKeyDown(KEY_INPUT_DOWN)) {
-		nextPos.y -= moveSpeed;
-	}
+	//if (Input::IsKeepKeyDown(KEY_INPUT_UP)) {
+	//	nextPos.y += moveSpeed;
+	//}
+	//if (Input::IsKeepKeyDown(KEY_INPUT_DOWN)) {
+	//	nextPos.y -= moveSpeed;
+	//}
 
     //出口に到達したかチェック
     if (m_pos.x < -100.0f) {

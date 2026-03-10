@@ -90,13 +90,13 @@ void Enemy::UpdateChase() {
     }
 
     //移動処理
-    // ロックされた m_targetPos に向かって進む
+    //ロックされた m_targetPos に向かって進む
     VECTOR moveVec = VSub(m_targetPos, m_pos);
     float d = VSize(moveVec);
     if (d > 0.1f) {
         float speed = 5.0f; //速度
         if (d < speed) {
-            m_pos = m_targetPos; // 行き過ぎ防止
+            m_pos = m_targetPos; //行き過ぎ防止
         }
         else {
             m_pos = VAdd(m_pos, VScale(VNorm(moveVec), speed));
@@ -120,7 +120,7 @@ void Enemy::UpdateDown()
     MV1SetRotationXYZ(modelHandle, VGet(DX_PI_F / 2.0f, 0, 0));
 
     if (stateTimer <= 0) {
-        MV1SetRotationXYZ(modelHandle, VGet(0, 0, 0)); // 復帰
+        MV1SetRotationXYZ(modelHandle, VGet(0, 0, 0)); //復帰
         state = EnemyState::Wait; //復帰後は待機へ
     }
 }

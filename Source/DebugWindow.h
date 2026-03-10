@@ -25,8 +25,9 @@ public:
 	static int m_minimapRange;
 	static bool ShouldShowMinimap() { return m_showMinimap; }
 	static bool m_showMinimap;
+	static bool ShouldShowCollision() { return m_showCollision; }
 private:
     static bool m_isOpen; //F1‚ÅØ‚è‘Ö‚¦‚é•\¦ƒtƒ‰ƒO
 	static bool m_showEnemyOnMap;
-
+	static bool m_showCollision;
 };

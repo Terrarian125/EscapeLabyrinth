@@ -52,7 +52,7 @@ public:
     //状態をセットする関数
     void SetState(EnemyState nextState, float duration = 5.0f) {
         state = nextState;
-        stateTimer = duration; // ダウン時間や食事時間をセット
+        stateTimer = duration; //ダウン時間や食事時間をセット
 
         //テストモード中に他のステートにされたらフラグを折るなどのケア
         if (nextState != EnemyState::Chase) m_isPathfindingTest = false;
