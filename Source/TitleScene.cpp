@@ -28,13 +28,13 @@ TitleScene::TitleScene() : currentSelect(0), isExitDialogVisible(false) {
     //bEtest->onClick = []() { SceneManager::ChangeScene("ETEST"); };
     //buttons.push_back(bEtest);
 
-    auto bNew = new GuiButton(bx, by, bw, bh, "Play");
+    auto bNew = new GuiButton(bx, by+80, bw, bh, "Play");
     bNew->onClick = []() { SceneManager::ChangeScene("STAGE"); };
     buttons.push_back(bNew);
 
-    auto bContinue = new GuiButton(bx, by+80, bw, bh, "つづきから");
-    bContinue->onClick = []() { /* ロード処理 */ };
-    buttons.push_back(bContinue);
+    //auto bContinue = new GuiButton(bx, by+80, bw, bh, "つづきから");
+    //bContinue->onClick = []() { /* ロード処理 */ };
+    //buttons.push_back(bContinue);
 
     auto bTutorial = new GuiButton(bx, by + 160, bw, bh, "チュートリアル");
     bTutorial->onClick = []() { SceneManager::ChangeScene("CUSTOMCHARACTER"); };

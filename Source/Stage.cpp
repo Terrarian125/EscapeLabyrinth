@@ -57,7 +57,7 @@ void Stage::GenerateMaze() {
     //ループ構造の作成
     //穴掘り法だけだと「一本道（木構造）」になり逃げ場がなくなるため、
     //意図的に壁を壊して周回ルートを作ります。
-    BreakWalls(12);
+    BreakWalls(25);
 }
 
 void Stage::Dig(int x, int y) {

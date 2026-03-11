@@ -7,6 +7,7 @@
 enum class EnemyState {
     Wait,     //待機（周囲を警戒）
     Roam,    //徘徊（目的地を決めずに移動）
+    Alert,     // 吠える状態
     Chase,   //追跡（プレイヤーや特定の目標へ）
     Eat,       //食事（プレイヤーへの攻撃成功後、再び襲うまでの間）
     Down    //ダウン（プレイヤーにやられたとき復活まで）
@@ -33,6 +34,7 @@ public:
     void Update() override;
     void UpdateWait();
     void UpdateRoam();
+    void UpdateAlert();
     void UpdateChase();
     void UpdateEat();
     void UpdateDown();
@@ -62,6 +64,9 @@ private:
     EnemyState state;
     std::vector<Eye> eyes;
     float stateTimer; //ダウン時間や食事時間の管理用
+    float alertTimer = 0.0f;
+    const float ALERT_TIME = 1.5f; // 1.5秒間吠える
+    const float SEARCH_RANGE = 200.0f; // 視認距離
 
     VECTOR m_targetPos; //UpdateChase内で次に向かうマスの中心を入れている変数
     VECTOR m_testTargetPos;//A*テスト用の目標

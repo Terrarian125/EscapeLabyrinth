@@ -49,8 +49,10 @@ public:
     void SetDescription(std::string desc) { description = desc; }//説明文を設定するための関数
     std::string GetDescription() const { return description; }//説明文を取得するための関数
 
-    //画像を設定するための関数を追加
+    //画像を設定するための関数
     void SetImage(int graphHandle) { imageHandle = graphHandle; }
+
+    void Fall() { isFalling = true; } //落下開始スイッチ
 private:
     int x, y, width, height;
     unsigned int color, hoverCol;
@@ -59,4 +61,11 @@ private:
     bool active;
     std::string description;//説明文用
     int imageHandle = -1; //画像のハンドル（初期値は-1 = 画像なし）
+    bool isFalling = false;   //落下中か
+    float vy = 0.0f;          //Y方向の速度
+    float angle = 0.0f;       //回転角
+    float vAngle = 0.0f;      //回転速度
+    float x_f = 0.0f;
+    float y_f = 0.0f;
+    const float gravity = 0.8f; //重力加速度
 };

@@ -12,6 +12,14 @@ GuiButton::GuiButton(int _x, int _y, int _w, int _h, std::string text)
 void GuiButton::Update() {
     if (!active) return;
 
+    //落下演出の処理
+    if (isFalling) {
+        vy += gravity/6;    //重力で加速
+        y += (int)vy;     //座標を更新
+        if (y > 800) active = false; //画面外（720px以下）に行ったら消す
+        return; //落下中はクリック判定などを無視する
+    }
+
     //前フレームでクリック処理をしたなら、このフレームはもう何もしない
     //(静的変数を使って全ボタンの二重反応を防止)
     static int lastUpdateFrame = -1;
