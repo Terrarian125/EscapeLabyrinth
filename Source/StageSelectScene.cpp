@@ -4,6 +4,8 @@
 #include "../Library/SceneManager.h"
 #include "../Library/GuiButton.h"
 #include "../Library/GameSetting.h"
+#include "DebugWindow.h"
+#include "global.h"
 
 StageSelectScene::StageSelectScene()
 {
@@ -46,7 +48,32 @@ StageSelectScene::StageSelectScene()
         btn->SetImage(diffImages[i]);
 
         btn->onClick = [i]() {
-            //GameSetting::SetDifficulty(i); //難易度設定
+            // i: 0=Easy, 1=Normal, 2=Hard, 3=Hell
+            g_currentDifficulty = static_cast<Difficulty>(i);
+
+            // ミニマップの設定（DebugWindowの変数を直接書き換える）
+            if (g_currentDifficulty == Difficulty::Easy) {
+                DebugWindow::m_showMinimap = true;
+                DebugWindow::m_minimapOffsetX = 956;
+                DebugWindow::m_minimapOffsetY = 0;
+                DebugWindow::m_minimapTileSize = 12;
+                DebugWindow::m_minimapRange = 10;
+                g_showCompass = true; // コンパスON
+            }
+            else if (g_currentDifficulty == Difficulty::Normal) {
+                DebugWindow::m_showMinimap = true;
+                DebugWindow::m_minimapOffsetX = 1014;
+                DebugWindow::m_minimapOffsetY = 12;
+                DebugWindow::m_minimapTileSize = 17;
+                DebugWindow::m_minimapRange = 7;
+				g_showCompass = true; // コンパスON
+            }
+            else {
+                // Hard, Hell は表示なし
+                DebugWindow::m_showMinimap = false;
+                g_showCompass = false;
+            }
+
             SceneManager::ChangeScene("PLAY");
             };
         buttons.push_back(btn);

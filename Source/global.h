@@ -1,5 +1,13 @@
 #pragma once
 
+// 難易度の定義
+enum class Difficulty {
+	Easy,
+	Normal,
+	Hard,
+	Hell
+};
+
 //2次元ベクトル（整数）
 struct Point
 {
@@ -40,3 +48,9 @@ const float STAGE_SCALE = 400.0f;
 
 //ゲームクリアのフラグ
 extern bool isGameClear; //外部からも参照できるようにする
+
+//難易度保持用
+extern Difficulty g_currentDifficulty;
+
+//Easyモード用：コンパスを表示するかどうか
+extern bool g_showCompass;

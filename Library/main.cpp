@@ -26,7 +26,10 @@
 #include "../Source/DebugWindow.h"
 #define CoGVersion (4.1)
 
-bool isGameClear = false;//ゲームクリアフラグ（プレイヤーが出口に到達したかどうか）
+Difficulty g_currentDifficulty = Difficulty::Normal;
+bool g_showCompass = false;
+bool isGameClear = false;//ゲームクリアフラグ
+
 
 //プログラムは WinMain から始まります
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)

@@ -323,6 +323,7 @@ void Stage::Draw() {
     }
 
 	//コンパスの描画
+    if (g_showCompass) {
     Player* player = FindGameObject<Player>();
     if (player) {
         std::vector<CompassTarget> targets;
@@ -337,6 +338,7 @@ void Stage::Draw() {
 
         //描画実行
         m_compass.Draw(player->GetAngle(), player->GetPosition(), targets);
+        }
     }
     if (DebugWindow::ShouldShowMinimap()) {
         DrawMinimap();
