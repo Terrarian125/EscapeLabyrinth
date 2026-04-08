@@ -51,7 +51,7 @@ StageSelectScene::StageSelectScene()
             // i: 0=Easy, 1=Normal, 2=Hard, 3=Hell
             g_currentDifficulty = static_cast<Difficulty>(i);
 
-            // ミニマップの設定（DebugWindowの変数を直接書き換える）
+            // 難易度別ミニマップ類の設定
             if (g_currentDifficulty == Difficulty::Easy) {
                 DebugWindow::m_showMinimap = true;
                 DebugWindow::m_minimapOffsetX = 956;
@@ -68,11 +68,14 @@ StageSelectScene::StageSelectScene()
                 DebugWindow::m_minimapRange = 7;
 				g_showCompass = true; // コンパスON
             }
-            else {
-                // Hard, Hell は表示なし
+            else  if (g_currentDifficulty == Difficulty:: Hard) {
                 DebugWindow::m_showMinimap = false;
                 g_showCompass = false;
             }
+			else if (g_currentDifficulty == Difficulty::Hell) {
+				DebugWindow::m_showMinimap = false;
+				g_showCompass = false;
+			}
 
             SceneManager::ChangeScene("PLAY");
             };
@@ -82,6 +85,7 @@ StageSelectScene::StageSelectScene()
 
 StageSelectScene::~StageSelectScene()
 {
+    DeleteSoundMem(Op_Music);
 }
 
 void StageSelectScene::Update()

@@ -38,6 +38,7 @@ public:
     std::function<void()> onClick;
 
     GuiButton(int x, int y, int w, int h, std::string text);
+    ~GuiButton()override;
     void Update() override;
     void Draw() override;
 

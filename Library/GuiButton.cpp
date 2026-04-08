@@ -9,6 +9,13 @@ GuiButton::GuiButton(int _x, int _y, int _w, int _h, std::string text)
     SetDrawOrder(10);
 }
 
+GuiButton::~GuiButton() {
+    if (imageHandle != -1) {
+        DeleteGraph(imageHandle); //ƒƒ‚ƒŠ‰ğ•ú
+        imageHandle = -1;
+    }
+}
+
 void GuiButton::Update() {
     if (!active) return;
 
